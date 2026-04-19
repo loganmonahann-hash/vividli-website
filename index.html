@@ -9,6 +9,12 @@
   <style>
     body { font-family: 'Inter', system-ui, sans-serif; }
     .hero-bg { background: linear-gradient(135deg, #0f172a 0%, #1e2937 100%); }
+    .mockup {
+      box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4);
+      border-radius: 20px;
+      overflow: hidden;
+      border: 12px solid #1f2937;
+    }
   </style>
 </head>
 <body class="bg-zinc-950 text-zinc-200">
@@ -17,33 +23,32 @@
   <nav class="border-b border-zinc-800 bg-zinc-950 sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="w-8 h-8 bg-teal-500 rounded-2xl flex items-center justify-center text-white font-bold text-xl">V</div>
-        <span class="text-2xl font-semibold tracking-tight">Vividli</span>
+        <img src="logo.png" 
+             alt="Vividli Logo" 
+             class="h-10 w-auto">
       </div>
-      <div class="hidden md:flex items-center gap-8 text-sm font-medium">
-        <a href="#" class="hover:text-white">How it Works</a>
-        <a href="#" class="hover:text-white">Example Report</a>
-        <a href="#" class="hover:text-white">Pricing</a>
-        <a href="#" class="hover:text-white">For Agencies</a>
+      <div class="flex items-center gap-8 text-sm font-medium">
+        <a href="#how" class="hover:text-white">How it Works</a>
+        <a href="#example" class="hover:text-white">Example</a>
+        <a href="#pricing" class="hover:text-white">Pricing</a>
       </div>
-      <div class="flex items-center gap-4">
-        <button onclick="window.location.href='https://calendly.com'" 
-                class="px-5 py-2.5 text-sm font-medium hover:bg-white hover:text-zinc-900 border border-zinc-700 rounded-2xl transition">
-          Book Demo
-        </button>
-        <button class="bg-teal-500 hover:bg-teal-600 px-6 py-2.5 text-sm font-semibold rounded-2xl transition">
-          Get Started Free
-        </button>
-      </div>
+      <button onclick="window.location.href='https://calendly.com'" 
+              class="bg-[#2979FF] hover:bg-[#1565C0] px-6 py-3 rounded-2xl font-semibold transition">
+        Book Demo
+      </button>
     </div>
   </nav>
 
   <!-- Hero -->
   <section class="hero-bg py-24">
     <div class="max-w-5xl mx-auto px-6 text-center">
+      <img src="logo.png" 
+           alt="Vividli" 
+           class="h-16 mx-auto mb-8 opacity-90">
+      
       <h1 class="text-6xl font-bold leading-tight mb-6">
         Show your clients the value<br>
-        <span class="text-teal-400">before</span> the invoice arrives.
+        <span class="text-[#2979FF]">before</span> the invoice arrives.
       </h1>
       <p class="text-2xl text-zinc-400 max-w-2xl mx-auto mb-10">
         Automated AI-powered performance reports sent the day before billing.<br>
@@ -53,94 +58,211 @@
         <button onclick="window.location.href='https://calendly.com'" 
                 class="bg-white text-zinc-900 px-8 py-4 rounded-3xl font-semibold text-lg flex items-center gap-3 hover:scale-105 transition">
           <i class="fa-solid fa-play"></i>
-          Watch 2-min Loom
+          Watch 2-min Demo
         </button>
         <button class="border border-zinc-400 px-8 py-4 rounded-3xl font-semibold text-lg hover:bg-white hover:text-zinc-900 transition">
-          Start 30-day pilot — $299/mo
+          Start 30-day Pilot — $299/mo
         </button>
       </div>
-      <p class="text-zinc-500 mt-6 text-sm">No credit card required • Unlimited clients • Cancel anytime</p>
     </div>
   </section>
 
-  <!-- How it Works -->
-  <section class="py-20 bg-zinc-900">
+  <!-- How It Works -->
+  <section id="how" class="py-20 bg-zinc-900">
     <div class="max-w-6xl mx-auto px-6">
-      <h2 class="text-4xl font-semibold text-center mb-12">It runs itself every single day</h2>
+      <h2 class="text-4xl font-semibold text-center mb-4">How Vividli Works</h2>
+      <p class="text-center text-zinc-400 mb-12 max-w-xl mx-auto">
+        Simple, automated, and runs every day without you lifting a finger.
+      </p>
+
       <div class="grid md:grid-cols-4 gap-8">
-        <div class="text-center">
-          <div class="w-12 h-12 mx-auto bg-teal-500/10 text-teal-400 rounded-2xl flex items-center justify-center text-2xl mb-4">1</div>
-          <h3 class="font-semibold mb-2">Checks Stripe</h3>
-          <p class="text-zinc-400">Every morning it finds which clients have an invoice due tomorrow.</p>
+        <div class="bg-zinc-800 rounded-3xl p-8 text-center hover:scale-105 transition">
+          <div class="w-16 h-16 mx-auto bg-[#2979FF]/10 text-[#2979FF] rounded-2xl flex items-center justify-center text-4xl mb-6">📅</div>
+          <h3 class="font-semibold text-xl mb-3">1. Daily Check</h3>
+          <p class="text-zinc-400">Every morning it checks Stripe for any invoices due tomorrow.</p>
         </div>
-        <div class="text-center">
-          <div class="w-12 h-12 mx-auto bg-teal-500/10 text-teal-400 rounded-2xl flex items-center justify-center text-2xl mb-4">2</div>
-          <h3 class="font-semibold mb-2">Pulls Live Data</h3>
-          <p class="text-zinc-400">Grabs fresh Meta + Google Ads performance automatically.</p>
+        <div class="bg-zinc-800 rounded-3xl p-8 text-center hover:scale-105 transition">
+          <div class="w-16 h-16 mx-auto bg-[#2979FF]/10 text-[#2979FF] rounded-2xl flex items-center justify-center text-4xl mb-6">📊</div>
+          <h3 class="font-semibold text-xl mb-3">2. Pulls Live Data</h3>
+          <p class="text-zinc-400">Automatically grabs fresh performance data from Meta and Google Ads.</p>
         </div>
-        <div class="text-center">
-          <div class="w-12 h-12 mx-auto bg-teal-500/10 text-teal-400 rounded-2xl flex items-center justify-center text-2xl mb-4">3</div>
-          <h3 class="font-semibold mb-2">AI Writes Insight</h3>
-          <p class="text-zinc-400">Generates warm, intelligent commentary + beautiful charts.</p>
+        <div class="bg-zinc-800 rounded-3xl p-8 text-center hover:scale-105 transition">
+          <div class="w-16 h-16 mx-auto bg-[#2979FF]/10 text-[#2979FF] rounded-2xl flex items-center justify-center text-4xl mb-6">✍️</div>
+          <h3 class="font-semibold text-xl mb-3">3. AI Writes the Story</h3>
+          <p class="text-zinc-400">Generates warm, intelligent commentary and beautiful charts.</p>
         </div>
-        <div class="text-center">
-          <div class="w-12 h-12 mx-auto bg-teal-500/10 text-teal-400 rounded-2xl flex items-center justify-center text-2xl mb-4">4</div>
-          <h3 class="font-semibold mb-2">Sends the Report</h3>
-          <p class="text-zinc-400">Beautiful branded email lands in the client's inbox the day before billing.</p>
+        <div class="bg-zinc-800 rounded-3xl p-8 text-center hover:scale-105 transition">
+          <div class="w-16 h-16 mx-auto bg-[#2979FF]/10 text-[#2979FF] rounded-2xl flex items-center justify-center text-4xl mb-6">✉️</div>
+          <h3 class="font-semibold text-xl mb-3">4. Delivers Value</h3>
+          <p class="text-zinc-400">Sends a branded, professional report to your client the day before billing.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Example Report -->
-  <section class="py-20 bg-white text-zinc-900">
+  <!-- Example Report - HTML Replica -->
+  <section id="example" class="py-20 bg-white text-zinc-900">
     <div class="max-w-6xl mx-auto px-6">
-      <h2 class="text-4xl font-semibold text-center mb-8">This is what your clients actually receive</h2>
-      <div class="max-w-4xl mx-auto border border-zinc-200 rounded-3xl overflow-hidden shadow-2xl">
-        <img src="https://your-image-link-here.com/example-report.png" alt="Vividli Example Report" class="w-full">
-        <!-- Replace the src above with a screenshot of your latest email -->
+      <h2 class="text-4xl font-semibold text-center mb-4">This is what your clients receive</h2>
+      <p class="text-center text-zinc-600 mb-12 max-w-2xl mx-auto">
+        Clean, professional, and insightful — delivered automatically the day before their invoice lands.
+      </p>
+      
+      <!-- HTML Email Replica -->
+      <div class="max-w-4xl mx-auto">
+        <div class="mockup bg-zinc-900 p-3">
+          <div class="bg-white rounded-2xl overflow-hidden">
+
+            <!-- Header -->
+            <div class="bg-[#0f172a] text-white px-8 py-8">
+              <div class="flex justify-between items-start">
+                <div>
+                  <span class="text-teal-400 font-bold text-xl">VIVIDLI</span>
+                </div>
+                <div class="text-right text-sm">
+                  <div>21 Mar – 19 Apr 2026</div>
+                  <div class="opacity-75">Monthly Performance Report</div>
+                </div>
+              </div>
+              <h1 class="text-3xl font-semibold mt-6">Your results are in,<br>Acme Digital.</h1>
+            </div>
+
+            <!-- Invoice Reminder -->
+            <div class="bg-yellow-400 text-yellow-950 px-8 py-3 text-sm font-medium border-b">
+              Invoice due tomorrow: AUD $99.00 — Questions? Just reply to this email.
+            </div>
+
+            <!-- Body -->
+            <div class="p-8 space-y-10 text-zinc-800 leading-relaxed">
+              <p>Hi Logan,</p>
+              <p>Here's a complete picture of what your advertising delivered this month — every dollar tracked, every result explained.</p>
+
+              <!-- At a Glance -->
+              <div>
+                <h3 class="uppercase text-xs tracking-widest text-zinc-500 mb-4">PERFORMANCE AT A GLANCE</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div class="bg-zinc-100 p-5 rounded-2xl text-center">
+                    <div class="text-2xl font-semibold">$7,051.95</div>
+                    <div class="text-xs text-emerald-600">+12.3% vs last month</div>
+                    <div class="text-xs text-zinc-500">AD SPEND</div>
+                  </div>
+                  <div class="bg-zinc-100 p-5 rounded-2xl text-center">
+                    <div class="text-2xl font-semibold">$30,534.94</div>
+                    <div class="text-xs text-emerald-600">+18.5% vs last month</div>
+                    <div class="text-xs text-zinc-500">REVENUE</div>
+                  </div>
+                  <div class="bg-zinc-100 p-5 rounded-2xl text-center">
+                    <div class="text-2xl font-semibold">4.33x</div>
+                    <div class="text-xs text-amber-600">-2.7% vs last month</div>
+                    <div class="text-xs text-zinc-500">ROAS</div>
+                  </div>
+                  <div class="bg-zinc-100 p-5 rounded-2xl text-center">
+                    <div class="text-2xl font-semibold">270</div>
+                    <div class="text-xs text-emerald-600">+16.4% vs last month</div>
+                    <div class="text-xs text-zinc-500">CONVERSIONS</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Charts -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-zinc-100 p-6 rounded-2xl">
+                  <p class="font-medium mb-4">ROAS Trend – Last 30 Days</p>
+                  <div class="h-64 bg-white border rounded-xl flex items-center justify-center text-zinc-400 text-sm">
+                    ROAS Trend Chart
+                  </div>
+                </div>
+                <div class="bg-zinc-100 p-6 rounded-2xl">
+                  <p class="font-medium mb-4">Advertising Spend vs Attributed Revenue – Weekly</p>
+                  <div class="h-64 bg-white border rounded-xl flex items-center justify-center text-zinc-400 text-sm">
+                    Spend vs Revenue Chart
+                  </div>
+                </div>
+              </div>
+
+              <!-- Analysis -->
+              <div class="prose prose-zinc max-w-none">
+                <p><strong>Strong ROAS month.</strong> You turned $7.1k in spend into $30.5k in revenue at a 4.33x return — up on last month’s blended ROAS and backed by 270 conversions, which is also up.</p>
+                <p>Your Retargeting — 30d campaign did the heavy lifting this month, delivering $14.1k in revenue from $2.9k in spend at a 5.23x return, nearly double the account average.</p>
+                <p>Overall, you are in a solid position. The underlying return is healthy, your best campaign is performing well above benchmark, and the dip this month looks like a volume question rather than a structural problem.</p>
+              </div>
+
+              <!-- Potential Opportunities -->
+              <div>
+                <h3 class="font-semibold mb-4">Potential Opportunities</h3>
+                <ol class="list-decimal pl-5 space-y-4 text-zinc-700 text-sm">
+                  <li>Based on this month’s numbers, it may be worth refreshing the audience seed for your Lookalike – Top 1% campaign.</li>
+                  <li>A strong opportunity here could be testing a new creative angle on Lookalike – Top 1%.</li>
+                  <li>Many accounts at this ROAS level look at increasing retargeting budget when the campaign is performing this well.</li>
+                </ol>
+              </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="bg-zinc-900 text-white text-center py-6 text-sm border-t">
+              Vividli • Generated automatically on 19 April 2026<br>
+              Questions? Just reply to this email.
+            </div>
+
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- Pricing -->
-  <section class="py-20 bg-zinc-900">
-    <div class="max-w-4xl mx-auto px-6 text-center">
-      <h2 class="text-4xl font-semibold mb-4">Simple, predictable pricing</h2>
-      <p class="text-zinc-400 mb-12">One flat fee. Unlimited clients. No per-client nonsense.</p>
-      
-      <div class="bg-zinc-800 rounded-3xl p-8 max-w-md mx-auto">
-        <p class="text-teal-400 font-medium mb-2">Founder Rate (first 10 agencies)</p>
-        <div class="text-7xl font-bold mb-2">$299</div>
-        <p class="text-zinc-400 mb-8">per month • billed monthly</p>
-        <ul class="text-left space-y-3 mb-10">
-          <li class="flex items-center gap-3"><i class="fa-solid fa-check text-teal-400"></i> Unlimited clients</li>
-          <li class="flex items-center gap-3"><i class="fa-solid fa-check text-teal-400"></i> Meta + Google Ads reports</li>
-          <li class="flex items-center gap-3"><i class="fa-solid fa-check text-teal-400"></i> AI-written commentary</li>
-          <li class="flex items-center gap-3"><i class="fa-solid fa-check text-teal-400"></i> Beautiful branded emails</li>
-          <li class="flex items-center gap-3"><i class="fa-solid fa-check text-teal-400"></i> 30-day risk-free pilot</li>
-        </ul>
-        <button class="w-full py-4 bg-teal-500 hover:bg-teal-600 rounded-2xl font-semibold text-lg">Start your 30-day pilot</button>
+  <section id="pricing" class="py-20 bg-zinc-900">
+    <div class="max-w-5xl mx-auto px-6 text-center">
+      <h2 class="text-4xl font-semibold mb-4">Simple. Transparent. Unlimited.</h2>
+      <p class="text-zinc-400 mb-12">One flat fee. No per-client pricing. No surprises.</p>
+
+      <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div class="bg-zinc-800 rounded-3xl p-10">
+          <h3 class="text-2xl font-semibold mb-2">Founder Pilot</h3>
+          <div class="flex items-baseline justify-center gap-2 mb-8">
+            <span class="text-6xl font-bold">$299</span>
+            <span class="text-zinc-400">/month</span>
+          </div>
+          <ul class="space-y-4 text-left mb-10">
+            <li class="flex items-start gap-3"><span class="text-[#2979FF] mt-1">✓</span> Unlimited clients</li>
+            <li class="flex items-start gap-3"><span class="text-[#2979FF] mt-1">✓</span> Meta + Google Ads reports</li>
+            <li class="flex items-start gap-3"><span class="text-[#2979FF] mt-1">✓</span> AI-powered commentary</li>
+            <li class="flex items-start gap-3"><span class="text-[#2979FF] mt-1">✓</span> Beautiful branded emails</li>
+            <li class="flex items-start gap-3"><span class="text-[#2979FF] mt-1">✓</span> 30-day risk-free pilot</li>
+          </ul>
+          <button onclick="window.location.href='https://calendly.com'" 
+                  class="w-full py-4 bg-[#2979FF] hover:bg-[#1565C0] rounded-2xl font-semibold transition">
+            Start 30-Day Pilot
+          </button>
+        </div>
+
+        <div class="pro-glow bg-gradient-to-br from-zinc-800 to-zinc-900 border border-[#2979FF]/40 rounded-3xl p-10 relative">
+          <div class="absolute -top-4 right-8 bg-[#2979FF] text-white text-xs font-bold px-4 py-1 rounded-full">RECOMMENDED</div>
+          <h3 class="text-2xl font-semibold mb-2">Pro Plan</h3>
+          <div class="flex items-baseline justify-center gap-2 mb-8">
+            <span class="text-6xl font-bold">$499</span>
+            <span class="text-zinc-400">/month</span>
+          </div>
+          <ul class="space-y-4 text-left mb-10">
+            <li class="flex items-start gap-3"><span class="text-[#2979FF] mt-1">✓</span> Everything in Founder</li>
+            <li class="flex items-start gap-3"><span class="text-[#2979FF] mt-1">✓</span> White-label reports</li>
+            <li class="flex items-start gap-3"><span class="text-[#2979FF] mt-1">✓</span> SMS delivery option</li>
+            <li class="flex items-start gap-3"><span class="text-[#2979FF] mt-1">✓</span> Custom AI prompts</li>
+            <li class="flex items-start gap-3"><span class="text-[#2979FF] mt-1">✓</span> Priority support</li>
+          </ul>
+          <button onclick="window.location.href='https://calendly.com'" 
+                  class="w-full py-4 bg-white text-zinc-900 hover:bg-zinc-100 rounded-2xl font-semibold transition">
+            Get Pro Plan
+          </button>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Final CTA -->
-  <section class="py-20 text-center bg-gradient-to-b from-zinc-900 to-black">
-    <h2 class="text-4xl font-semibold mb-6">Ready to make your clients see the value first?</h2>
-    <button onclick="window.location.href='https://calendly.com'" 
-            class="bg-white text-zinc-900 px-10 py-5 rounded-3xl font-semibold text-xl hover:scale-105 transition">
-      Book a 15-minute demo
-    </button>
-    <p class="text-zinc-500 mt-6">Or reply to this message and I’ll send you the Loom</p>
-  </section>
-
   <!-- Footer -->
-  <footer class="bg-black py-12 text-zinc-500 text-sm">
-    <div class="max-w-7xl mx-auto px-6 text-center">
-      <p>© 2026 Vividli • Built in Brisbane, Australia</p>
-      <p class="mt-2">Helping digital agencies prove value before the bill.</p>
-    </div>
+  <footer class="bg-black py-12 text-zinc-500 text-sm text-center">
+    <p>© 2026 Vividli • Built in Brisbane, Australia</p>
+    <p class="mt-2">Helping digital agencies prove value before the bill.</p>
   </footer>
 </body>
 </html>
