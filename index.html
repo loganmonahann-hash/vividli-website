@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vividli — Value Before The Bill</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .hero-bg { background: linear-gradient(135deg, #0f172a 0%, #1e2937 100%); }
+  </style>
+</head>
+<body class="bg-zinc-950 text-zinc-200">
+
+  <!-- Navbar -->
+  <nav class="border-b border-zinc-800 bg-zinc-950 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 bg-teal-500 rounded-2xl flex items-center justify-center text-white font-bold text-xl">V</div>
+        <span class="text-2xl font-semibold tracking-tight">Vividli</span>
+      </div>
+      <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+        <a href="#" class="hover:text-white">How it Works</a>
+        <a href="#" class="hover:text-white">Example Report</a>
+        <a href="#" class="hover:text-white">Pricing</a>
+        <a href="#" class="hover:text-white">For Agencies</a>
+      </div>
+      <div class="flex items-center gap-4">
+        <button onclick="window.location.href='https://calendly.com'" 
+                class="px-5 py-2.5 text-sm font-medium hover:bg-white hover:text-zinc-900 border border-zinc-700 rounded-2xl transition">
+          Book Demo
+        </button>
+        <button class="bg-teal-500 hover:bg-teal-600 px-6 py-2.5 text-sm font-semibold rounded-2xl transition">
+          Get Started Free
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero-bg py-24">
+    <div class="max-w-5xl mx-auto px-6 text-center">
+      <h1 class="text-6xl font-bold leading-tight mb-6">
+        Show your clients the value<br>
+        <span class="text-teal-400">before</span> the invoice arrives.
+      </h1>
+      <p class="text-2xl text-zinc-400 max-w-2xl mx-auto mb-10">
+        Automated AI-powered performance reports sent the day before billing.<br>
+        Reduce churn. Prove ROI. Build trust.
+      </p>
+      <div class="flex justify-center gap-4">
+        <button onclick="window.location.href='https://calendly.com'" 
+                class="bg-white text-zinc-900 px-8 py-4 rounded-3xl font-semibold text-lg flex items-center gap-3 hover:scale-105 transition">
+          <i class="fa-solid fa-play"></i>
+          Watch 2-min Loom
+        </button>
+        <button class="border border-zinc-400 px-8 py-4 rounded-3xl font-semibold text-lg hover:bg-white hover:text-zinc-900 transition">
+          Start 30-day pilot — $299/mo
+        </button>
+      </div>
+      <p class="text-zinc-500 mt-6 text-sm">No credit card required • Unlimited clients • Cancel anytime</p>
+    </div>
+  </section>
+
+  <!-- How it Works -->
+  <section class="py-20 bg-zinc-900">
+    <div class="max-w-6xl mx-auto px-6">
+      <h2 class="text-4xl font-semibold text-center mb-12">It runs itself every single day</h2>
+      <div class="grid md:grid-cols-4 gap-8">
+        <div class="text-center">
+          <div class="w-12 h-12 mx-auto bg-teal-500/10 text-teal-400 rounded-2xl flex items-center justify-center text-2xl mb-4">1</div>
+          <h3 class="font-semibold mb-2">Checks Stripe</h3>
+          <p class="text-zinc-400">Every morning it finds which clients have an invoice due tomorrow.</p>
+        </div>
+        <div class="text-center">
+          <div class="w-12 h-12 mx-auto bg-teal-500/10 text-teal-400 rounded-2xl flex items-center justify-center text-2xl mb-4">2</div>
+          <h3 class="font-semibold mb-2">Pulls Live Data</h3>
+          <p class="text-zinc-400">Grabs fresh Meta + Google Ads performance automatically.</p>
+        </div>
+        <div class="text-center">
+          <div class="w-12 h-12 mx-auto bg-teal-500/10 text-teal-400 rounded-2xl flex items-center justify-center text-2xl mb-4">3</div>
+          <h3 class="font-semibold mb-2">AI Writes Insight</h3>
+          <p class="text-zinc-400">Generates warm, intelligent commentary + beautiful charts.</p>
+        </div>
+        <div class="text-center">
+          <div class="w-12 h-12 mx-auto bg-teal-500/10 text-teal-400 rounded-2xl flex items-center justify-center text-2xl mb-4">4</div>
+          <h3 class="font-semibold mb-2">Sends the Report</h3>
+          <p class="text-zinc-400">Beautiful branded email lands in the client's inbox the day before billing.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Example Report -->
+  <section class="py-20 bg-white text-zinc-900">
+    <div class="max-w-6xl mx-auto px-6">
+      <h2 class="text-4xl font-semibold text-center mb-8">This is what your clients actually receive</h2>
+      <div class="max-w-4xl mx-auto border border-zinc-200 rounded-3xl overflow-hidden shadow-2xl">
+        <img src="https://your-image-link-here.com/example-report.png" alt="Vividli Example Report" class="w-full">
+        <!-- Replace the src above with a screenshot of your latest email -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="py-20 bg-zinc-900">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <h2 class="text-4xl font-semibold mb-4">Simple, predictable pricing</h2>
+      <p class="text-zinc-400 mb-12">One flat fee. Unlimited clients. No per-client nonsense.</p>
+      
+      <div class="bg-zinc-800 rounded-3xl p-8 max-w-md mx-auto">
+        <p class="text-teal-400 font-medium mb-2">Founder Rate (first 10 agencies)</p>
+        <div class="text-7xl font-bold mb-2">$299</div>
+        <p class="text-zinc-400 mb-8">per month • billed monthly</p>
+        <ul class="text-left space-y-3 mb-10">
+          <li class="flex items-center gap-3"><i class="fa-solid fa-check text-teal-400"></i> Unlimited clients</li>
+          <li class="flex items-center gap-3"><i class="fa-solid fa-check text-teal-400"></i> Meta + Google Ads reports</li>
+          <li class="flex items-center gap-3"><i class="fa-solid fa-check text-teal-400"></i> AI-written commentary</li>
+          <li class="flex items-center gap-3"><i class="fa-solid fa-check text-teal-400"></i> Beautiful branded emails</li>
+          <li class="flex items-center gap-3"><i class="fa-solid fa-check text-teal-400"></i> 30-day risk-free pilot</li>
+        </ul>
+        <button class="w-full py-4 bg-teal-500 hover:bg-teal-600 rounded-2xl font-semibold text-lg">Start your 30-day pilot</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="py-20 text-center bg-gradient-to-b from-zinc-900 to-black">
+    <h2 class="text-4xl font-semibold mb-6">Ready to make your clients see the value first?</h2>
+    <button onclick="window.location.href='https://calendly.com'" 
+            class="bg-white text-zinc-900 px-10 py-5 rounded-3xl font-semibold text-xl hover:scale-105 transition">
+      Book a 15-minute demo
+    </button>
+    <p class="text-zinc-500 mt-6">Or reply to this message and I’ll send you the Loom</p>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-black py-12 text-zinc-500 text-sm">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+      <p>© 2026 Vividli • Built in Brisbane, Australia</p>
+      <p class="mt-2">Helping digital agencies prove value before the bill.</p>
+    </div>
+  </footer>
+</body>
+</html>
