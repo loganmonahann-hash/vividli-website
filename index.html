@@ -7,6 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
+    html { scroll-behavior: smooth; }
     body { font-family: 'Inter', system-ui, sans-serif; }
     .hero-bg { background: linear-gradient(135deg, #060d1a 0%, #0f172a 100%); }
     .email-float {
@@ -30,6 +31,12 @@
     .reveal-delay-2 { transition-delay: 0.2s; }
     .reveal-delay-3 { transition-delay: 0.3s; }
     .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* FAQ accordion */
+    details summary { list-style: none; cursor: pointer; }
+    details summary::-webkit-details-marker { display: none; }
+    details[open] .chevron { transform: rotate(180deg); }
+    .chevron { transition: transform 0.3s ease; }
   </style>
 </head>
 <body class="bg-slate-900 text-zinc-200">
@@ -46,6 +53,7 @@
         <a href="#how" class="hover:text-white">How it Works</a>
         <a href="#example" class="hover:text-white">Example</a>
         <a href="#pricing" class="hover:text-white">Pricing</a>
+        <a href="#faq" class="hover:text-white">FAQ</a>
       </div>
       <button onclick="window.location.href='https://calendly.com/loganmonahan57/30min'" 
               class="bg-[#2979FF] hover:bg-[#1565C0] px-6 py-3 rounded-2xl font-semibold transition">
@@ -75,7 +83,7 @@
           <i class="fa-solid fa-play"></i>
           Watch 2-min Demo
         </button>
-        <button class="border border-[#2979FF]/50 text-zinc-200 px-8 py-4 rounded-3xl font-semibold text-lg hover:bg-[#2979FF] hover:text-white hover:border-[#2979FF] transition">
+        <button onclick="window.location.href='https://calendly.com/loganmonahan57/30min'" class="border border-[#2979FF]/50 text-zinc-200 px-8 py-4 rounded-3xl font-semibold text-lg hover:bg-[#2979FF] hover:text-white hover:border-[#2979FF] transition">
           Start 30-day Pilot — $149/mo
         </button>
       </div>
@@ -353,10 +361,83 @@
     </div>
   </section>
 
+  <!-- FAQ -->
+  <section id="faq" class="py-20 bg-slate-900">
+    <div class="max-w-3xl mx-auto px-6">
+      <div class="mb-14 text-center reveal">
+        <p class="text-[#2979FF] font-semibold text-sm uppercase tracking-widest mb-3">FAQ</p>
+        <h2 class="text-4xl font-bold">Common questions</h2>
+      </div>
+
+      <div class="space-y-3">
+
+        <details class="bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden reveal reveal-delay-1">
+          <summary class="flex items-center justify-between px-6 py-5 font-medium text-zinc-200">
+            Which ad platforms do you support, and how does Vividli connect?
+            <svg class="chevron w-5 h-5 text-[#2979FF] flex-shrink-0 ml-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="px-6 pb-5 text-zinc-400 text-sm leading-relaxed">
+            Currently Meta Ads and Google Ads, which cover the majority of what most agencies run for their clients. TikTok Ads is coming soon. You connect accounts once during onboarding via secure OAuth — Vividli reads performance data only and never makes changes to your campaigns or spend.
+          </div>
+        </details>
+
+        <details class="bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden reveal reveal-delay-2">
+          <summary class="flex items-center justify-between px-6 py-5 font-medium text-zinc-200">
+            How does Vividli know when to send the report?
+            <svg class="chevron w-5 h-5 text-[#2979FF] flex-shrink-0 ml-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="px-6 pb-5 text-zinc-400 text-sm leading-relaxed">
+            Vividli connects to your Stripe account and checks every morning for invoices due the following day. When one is detected, the report goes out automatically at 8am AEST. For clients not on Stripe, you can set a fixed monthly send date instead — Vividli will deliver on schedule regardless.
+          </div>
+        </details>
+
+        <details class="bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden reveal reveal-delay-3">
+          <summary class="flex items-center justify-between px-6 py-5 font-medium text-zinc-200">
+            How long does setup take?
+            <svg class="chevron w-5 h-5 text-[#2979FF] flex-shrink-0 ml-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="px-6 pb-5 text-zinc-400 text-sm leading-relaxed">
+            Getting started takes about 15 minutes. You tell us your client details, connect their ad accounts, and Vividli handles everything from there. No technical knowledge required.
+          </div>
+        </details>
+
+        <details class="bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden reveal reveal-delay-1">
+          <summary class="flex items-center justify-between px-6 py-5 font-medium text-zinc-200">
+            Is the AI commentary actually good — even when results are down?
+            <svg class="chevron w-5 h-5 text-[#2979FF] flex-shrink-0 ml-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="px-6 pb-5 text-zinc-400 text-sm leading-relaxed">
+            We spent a lot of time on this. The commentary reads like a senior account manager — specific to each client's actual numbers, written in plain English, and no generic filler. That includes bad months. Rather than going quiet, Vividli contextualises underperformance honestly and always frames a path forward. A transparent report builds more trust than silence.
+          </div>
+        </details>
+
+        <details class="bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden reveal reveal-delay-2">
+          <summary class="flex items-center justify-between px-6 py-5 font-medium text-zinc-200">
+            Do my clients know it's automated?
+            <svg class="chevron w-5 h-5 text-[#2979FF] flex-shrink-0 ml-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="px-6 pb-5 text-zinc-400 text-sm leading-relaxed">
+            That's up to you. The report arrives from your agency's email domain and carries your branding. Most agencies present it as part of their standard reporting process.
+          </div>
+        </details>
+
+        <details class="bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden reveal reveal-delay-1">
+          <summary class="flex items-center justify-between px-6 py-5 font-medium text-zinc-200">
+            Is my data secure and is there a lock-in contract?
+            <svg class="chevron w-5 h-5 text-[#2979FF] flex-shrink-0 ml-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="px-6 pb-5 text-zinc-400 text-sm leading-relaxed">
+            All data is encrypted in transit and at rest — Vividli only reads aggregate ad performance metrics, never personal customer data. And no, there's no lock-in. Monthly subscription, cancel any time.
+          </div>
+        </details>
+
+      </div>
+    </div>
+  </section>
+
   <!-- Footer -->
   <footer class="bg-black py-12 text-zinc-500 text-sm text-center">
-    <p>© 2026 Vividli • Built in Brisbane, Australia</p>
-    <p class="mt-2">Helping digital agencies prove value before the bill.</p>
+    <p>© 2026 Vividli • Helping digital agencies prove value before the bill.</p>
   </footer>
 
   <script>
