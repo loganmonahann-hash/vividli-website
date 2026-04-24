@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Vividli sends automated AI-powered performance reports before invoices land, helping agencies prove value and reduce churn.">
   <title>Vividli | Value Before The Bill</title>
+  <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://cdnjs.cloudflare.com">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -648,6 +650,10 @@
       color: #e15b5b;
     }
 
+    .report-kpi-change.neutral {
+      color: #d08b1a;
+    }
+
     .report-kpi-label {
       margin-top: 0.3rem;
       color: #788190;
@@ -884,6 +890,139 @@
       line-height: 1.55;
     }
 
+    .scenario-card {
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.075), rgba(255,255,255,0.035)),
+        rgba(17, 20, 29, 0.7);
+      padding: 1rem;
+    }
+
+    .scenario-topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 760;
+      text-transform: uppercase;
+    }
+
+    .scenario-toggle {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.45rem;
+      margin-top: 0.85rem;
+      padding: 0.35rem;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.045);
+    }
+
+    .scenario-button {
+      min-height: 2.45rem;
+      border-radius: 6px;
+      color: #cbd3df;
+      font-size: 0.84rem;
+      font-weight: 820;
+      transition: background 180ms ease, color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .scenario-button.active {
+      color: #06111b;
+      background: linear-gradient(135deg, #80f0c2, #7dd9ff);
+      box-shadow: 0 10px 28px rgba(34, 211, 238, 0.16);
+    }
+
+    .scenario-copy {
+      margin-top: 0.85rem;
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.6;
+    }
+
+    .integration-section {
+      padding: 4.7rem 0;
+      border-block: 1px solid rgba(255,255,255,0.08);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0)),
+        #0b0d13;
+    }
+
+    .integration-panel {
+      display: grid;
+      grid-template-columns: 0.72fr 1.28fr;
+      gap: 1.5rem;
+      align-items: stretch;
+      border: 1px solid rgba(255,255,255,0.11);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(135deg, rgba(41,121,255,0.09), transparent 46%, rgba(72,213,151,0.08)),
+        rgba(17, 20, 29, 0.7);
+      padding: 1.1rem;
+    }
+
+    .integration-lead {
+      display: flex;
+      min-height: 100%;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 2rem;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius);
+      background: rgba(7, 8, 13, 0.52);
+      padding: 1.4rem;
+    }
+
+    .integration-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.8rem;
+    }
+
+    .integration-card {
+      display: grid;
+      gap: 0.9rem;
+      min-height: 10.5rem;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.045);
+      padding: 1rem;
+    }
+
+    .integration-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.55rem;
+      height: 2.55rem;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.075);
+      color: var(--brand-2);
+      font-size: 1.2rem;
+    }
+
+    .integration-card strong {
+      display: block;
+      color: white;
+      font-size: 0.98rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .integration-card p {
+      color: var(--muted);
+      font-size: 0.83rem;
+      line-height: 1.55;
+    }
+
+    .trust-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+    }
+
     .impact-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -1087,6 +1226,12 @@
       .hero-report-stack { opacity: 0.48; width: min(24rem, 42vw); }
       .workflow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .workflow::before { display: none; }
+      .integration-panel {
+        grid-template-columns: 1fr;
+      }
+      .integration-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
     }
 
     @media (max-width: 860px) {
@@ -1110,6 +1255,9 @@
       .preview-shell,
       .impact-grid,
       .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+      .integration-grid {
         grid-template-columns: 1fr;
       }
       .section { padding: 4.75rem 0; }
@@ -1162,10 +1310,6 @@
       </div>
 
       <div class="hidden items-center gap-3 lg:flex">
-        <button type="button" class="btn btn-secondary h-11 px-4 text-sm" onclick="openReportModal()">
-          <i class="fa-regular fa-eye"></i>
-          Preview Report
-        </button>
         <a href="https://calendly.com/loganmonahan57/30min" class="btn btn-primary h-11 px-5 text-sm">
           <i class="fa-regular fa-calendar"></i>
           Book Demo
@@ -1184,11 +1328,7 @@
         <a href="#impact" class="nav-link rounded-[6px] px-3 py-3" data-mobile-link>Impact</a>
         <a href="#pricing" class="nav-link rounded-[6px] px-3 py-3" data-mobile-link>Pricing</a>
         <a href="#faq" class="nav-link rounded-[6px] px-3 py-3" data-mobile-link>FAQ</a>
-        <div class="grid grid-cols-1 gap-3 pt-2 sm:grid-cols-2">
-          <button type="button" class="btn btn-secondary px-4 py-3" onclick="openReportModal()">
-            <i class="fa-regular fa-eye"></i>
-            Preview Report
-          </button>
+        <div class="grid grid-cols-1 gap-3 pt-2">
           <a href="https://calendly.com/loganmonahan57/30min" class="btn btn-primary px-4 py-3">
             <i class="fa-regular fa-calendar"></i>
             Book Demo
@@ -1216,28 +1356,28 @@
             <div class="report-invoice">Invoice due tomorrow: AUD $99.00. Questions? Just reply to this email.</div>
             <div class="report-document-body">
               <p class="report-copy">Hi Logan,</p>
-              <p class="report-copy">Here's a complete picture of what your advertising delivered this month: every dollar tracked, every result explained.</p>
+              <p class="report-copy" data-report-field="intro">Here's a complete picture of what your advertising delivered this month: every dollar tracked, every result explained.</p>
               <div>
                 <h3 class="report-section-label mb-4">Performance at a Glance</h3>
                 <div class="report-kpi-grid">
                   <div class="report-kpi">
-                    <div class="report-kpi-value">$7,051.95</div>
-                    <div class="report-kpi-change">+12.3% vs last month</div>
+                    <div class="report-kpi-value" data-report-field="spendValue">$7,051.95</div>
+                    <div class="report-kpi-change" data-report-field="spendChange">+12.3% vs last month</div>
                     <div class="report-kpi-label">Ad Spend</div>
                   </div>
                   <div class="report-kpi">
-                    <div class="report-kpi-value">$30,534.94</div>
-                    <div class="report-kpi-change">+18.5% vs last month</div>
+                    <div class="report-kpi-value" data-report-field="revenueValue">$30,534.94</div>
+                    <div class="report-kpi-change" data-report-field="revenueChange">+18.5% vs last month</div>
                     <div class="report-kpi-label">Revenue</div>
                   </div>
                   <div class="report-kpi">
-                    <div class="report-kpi-value">4.33x</div>
-                    <div class="report-kpi-change down">-2.7% vs last month</div>
+                    <div class="report-kpi-value" data-report-field="roasValue">4.33x</div>
+                    <div class="report-kpi-change down" data-report-field="roasChange">-2.7% vs last month</div>
                     <div class="report-kpi-label">ROAS</div>
                   </div>
                   <div class="report-kpi">
-                    <div class="report-kpi-value">270</div>
-                    <div class="report-kpi-change">+16.4% vs last month</div>
+                    <div class="report-kpi-value" data-report-field="conversionsValue">270</div>
+                    <div class="report-kpi-change" data-report-field="conversionsChange">+16.4% vs last month</div>
                     <div class="report-kpi-label">Conversions</div>
                   </div>
                 </div>
@@ -1364,6 +1504,70 @@
       </div>
     </section>
 
+    <section class="integration-section">
+      <div class="mx-auto max-w-7xl px-5 lg:px-8">
+        <div class="integration-panel" data-reveal>
+          <div class="integration-lead">
+            <div>
+              <p class="section-kicker mb-4">Integrations</p>
+              <h2 class="text-3xl font-black leading-tight text-white">Connects cleanly to the stack agencies already trust.</h2>
+              <p class="mt-5 text-sm leading-7 text-[var(--muted)]">Vividli is designed as a reporting layer: read the right data, explain it clearly, and avoid touching campaigns or spend.</p>
+            </div>
+            <div class="trust-row">
+              <span class="badge"><i class="fa-solid fa-lock text-[var(--mint)]"></i>Read-only access</span>
+              <span class="badge"><i class="fa-solid fa-key text-[var(--brand-2)]"></i>OAuth setup</span>
+              <span class="badge"><i class="fa-solid fa-shield-halved text-[var(--sun)]"></i>Encrypted transit</span>
+            </div>
+          </div>
+
+          <div class="integration-grid">
+            <article class="integration-card" data-tilt>
+              <span class="integration-icon"><i class="fa-brands fa-stripe"></i></span>
+              <div>
+                <strong>Stripe</strong>
+                <p>Finds upcoming invoices so reports arrive before billing friction starts.</p>
+              </div>
+            </article>
+            <article class="integration-card" data-tilt>
+              <span class="integration-icon"><i class="fa-brands fa-meta"></i></span>
+              <div>
+                <strong>Meta Ads</strong>
+                <p>Pulls aggregate campaign performance for spend, revenue, ROAS, and conversions.</p>
+              </div>
+            </article>
+            <article class="integration-card" data-tilt>
+              <span class="integration-icon"><i class="fa-brands fa-google"></i></span>
+              <div>
+                <strong>Google Ads</strong>
+                <p>Blends search and paid traffic performance into the same client-friendly report.</p>
+              </div>
+            </article>
+            <article class="integration-card" data-tilt>
+              <span class="integration-icon"><i class="fa-solid fa-user-shield"></i></span>
+              <div>
+                <strong>Read-only OAuth</strong>
+                <p>Connect once during onboarding. Vividli reads reporting data and does not edit campaigns.</p>
+              </div>
+            </article>
+            <article class="integration-card" data-tilt>
+              <span class="integration-icon"><i class="fa-solid fa-envelope-open-text"></i></span>
+              <div>
+                <strong>Branded report content</strong>
+                <p>Reports carry your agency positioning, client tone, and the context your accounts need.</p>
+              </div>
+            </article>
+            <article class="integration-card" data-tilt>
+              <span class="integration-icon"><i class="fa-solid fa-database"></i></span>
+              <div>
+                <strong>Aggregate metrics</strong>
+                <p>Built around performance reporting, not personal customer records or campaign changes.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="example" class="section section-soft">
       <div class="mx-auto max-w-7xl px-5 lg:px-8">
         <div class="mb-12 grid gap-8 lg:grid-cols-[0.78fr_1.22fr] lg:items-end">
@@ -1384,6 +1588,19 @@
 
         <div class="preview-shell">
           <div class="space-y-3" data-reveal="left">
+            <div class="scenario-card">
+              <div class="scenario-topline">
+                <span>Monthly scenario</span>
+                <span data-report-field="scenarioLabel">Good month</span>
+              </div>
+              <div class="scenario-toggle" role="group" aria-label="Choose sample report month type">
+                <button class="scenario-button active" type="button" data-scenario-button="good">Good</button>
+                <button class="scenario-button" type="button" data-scenario-button="mixed">Mixed</button>
+                <button class="scenario-button" type="button" data-scenario-button="bad">Bad</button>
+              </div>
+              <p class="scenario-copy" data-report-field="scenarioSummary">A strong month where Vividli reinforces momentum, explains why efficiency improved, and gives the client clear next steps.</p>
+            </div>
+
             <button class="tab-button active" type="button" data-report-tab data-shift="0">
               <strong><i class="fa-solid fa-gauge-high mr-2 text-[var(--brand-2)]"></i>Performance Snapshot</strong>
               <span>Spend, revenue, ROAS, and conversions in one clean opening view.</span>
@@ -1449,29 +1666,29 @@
 
                 <div class="report-document-body">
                   <p class="report-copy">Hi Logan,</p>
-                  <p class="report-copy">Here's a complete picture of what your advertising delivered this month: every dollar tracked, every result explained.</p>
+                  <p class="report-copy" data-report-field="intro">Here's a complete picture of what your advertising delivered this month: every dollar tracked, every result explained.</p>
 
                   <section>
                     <h3 class="report-section-label mb-4">Performance at a Glance</h3>
                     <div class="report-kpi-grid">
                       <div class="report-kpi">
-                        <div class="report-kpi-value">$7,051.95</div>
-                        <div class="report-kpi-change">+12.3% vs last month</div>
+                        <div class="report-kpi-value" data-report-field="spendValue">$7,051.95</div>
+                        <div class="report-kpi-change" data-report-field="spendChange">+12.3% vs last month</div>
                         <div class="report-kpi-label">Ad Spend</div>
                       </div>
                       <div class="report-kpi">
-                        <div class="report-kpi-value">$30,534.94</div>
-                        <div class="report-kpi-change">+18.5% vs last month</div>
+                        <div class="report-kpi-value" data-report-field="revenueValue">$30,534.94</div>
+                        <div class="report-kpi-change" data-report-field="revenueChange">+18.5% vs last month</div>
                         <div class="report-kpi-label">Revenue</div>
                       </div>
                       <div class="report-kpi">
-                        <div class="report-kpi-value">4.33x</div>
-                        <div class="report-kpi-change down">-2.7% vs last month</div>
+                        <div class="report-kpi-value" data-report-field="roasValue">4.33x</div>
+                        <div class="report-kpi-change down" data-report-field="roasChange">-2.7% vs last month</div>
                         <div class="report-kpi-label">ROAS</div>
                       </div>
                       <div class="report-kpi">
-                        <div class="report-kpi-value">270</div>
-                        <div class="report-kpi-change">+16.4% vs last month</div>
+                        <div class="report-kpi-value" data-report-field="conversionsValue">270</div>
+                        <div class="report-kpi-change" data-report-field="conversionsChange">+16.4% vs last month</div>
                         <div class="report-kpi-label">Conversions</div>
                       </div>
                     </div>
@@ -1491,9 +1708,9 @@
                   <section>
                     <h3 class="report-section-label mb-4">Our Analysis</h3>
                     <div class="report-analysis">
-                      <p>Strong month. You grew revenue to $12.4k while actually spending less, and that pushed your blended ROAS up to 4.1x. More conversions, better efficiency, lower spend. That is the combination you want to see.</p>
-                      <p class="mt-4">Retargeting - 30d did the heavy lifting. It returned $4.6k on $1.2k in spend, landing right at the account average and carrying a disproportionate share of the month's results.</p>
-                      <p class="mt-4">Prospecting - Broad and Lookalike - Top 1% both came in below the account average, at 2.8x and 2.6x respectively. These campaigns are the engine that feeds retargeting over time, so they are worth a close look rather than a quick fix.</p>
+                      <p data-report-field="analysis1">Strong month. You grew revenue to $12.4k while actually spending less, and that pushed your blended ROAS up to 4.1x. More conversions, better efficiency, lower spend. That is the combination you want to see.</p>
+                      <p class="mt-4" data-report-field="analysis2">Retargeting - 30d did the heavy lifting. It returned $4.6k on $1.2k in spend, landing right at the account average and carrying a disproportionate share of the month's results.</p>
+                      <p class="mt-4" data-report-field="analysis3">Prospecting - Broad and Lookalike - Top 1% both came in below the account average, at 2.8x and 2.6x respectively. These campaigns are the engine that feeds retargeting over time, so they are worth a close look rather than a quick fix.</p>
                     </div>
                   </section>
 
@@ -1502,15 +1719,15 @@
                     <div class="report-opportunity-list">
                       <div class="report-opportunity">
                         <span>1</span>
-                        <p>Based on this month's numbers, it may be worth tightening the audience on Prospecting - Broad. At 2.8x ROAS it is spending efficiently but trailing the account average.</p>
+                        <p data-report-field="opportunity1">Based on this month's numbers, it may be worth tightening the audience on Prospecting - Broad. At 2.8x ROAS it is spending efficiently but trailing the account average.</p>
                       </div>
                       <div class="report-opportunity">
                         <span>2</span>
-                        <p>The data points toward a budget rebalance worth considering. Retargeting - 30d is your strongest performer at 4.2x and only received $1.2k in spend.</p>
+                        <p data-report-field="opportunity2">The data points toward a budget rebalance worth considering. Retargeting - 30d is your strongest performer at 4.2x and only received $1.2k in spend.</p>
                       </div>
                       <div class="report-opportunity">
                         <span>3</span>
-                        <p>A strong opportunity here could be reviewing the creative and offer on Lookalike - Top 1%. Lookalike audiences usually respond well to creative that mirrors what converted existing customers.</p>
+                        <p data-report-field="opportunity3">A strong opportunity here could be reviewing the creative and offer on Lookalike - Top 1%. Lookalike audiences usually respond well to creative that mirrors what converted existing customers.</p>
                       </div>
                     </div>
                   </section>
@@ -1529,9 +1746,9 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr><td><strong>Prospecting - Broad</strong></td><td>$1,064.17</td><td>$2,989.61</td><td>2.8x</td><td><strong>Strong</strong></td></tr>
-                          <tr><td><strong>Retargeting - 30d</strong></td><td>$1,216.20</td><td>$4,550.01</td><td>4.17x</td><td><strong>Strong</strong></td></tr>
-                          <tr><td><strong>Lookalike - Top 1%</strong></td><td>$760.12</td><td>$1,549.05</td><td>2.61x</td><td><strong>Strong</strong></td></tr>
+                          <tr><td><strong data-report-field="campaign1Name">Prospecting - Broad</strong></td><td data-report-field="campaign1Spend">$1,064.17</td><td data-report-field="campaign1Revenue">$2,989.61</td><td data-report-field="campaign1Roas">2.8x</td><td><strong data-report-field="campaign1Status">Strong</strong></td></tr>
+                          <tr><td><strong data-report-field="campaign2Name">Retargeting - 30d</strong></td><td data-report-field="campaign2Spend">$1,216.20</td><td data-report-field="campaign2Revenue">$4,550.01</td><td data-report-field="campaign2Roas">4.17x</td><td><strong data-report-field="campaign2Status">Strong</strong></td></tr>
+                          <tr><td><strong data-report-field="campaign3Name">Lookalike - Top 1%</strong></td><td data-report-field="campaign3Spend">$760.12</td><td data-report-field="campaign3Revenue">$1,549.05</td><td data-report-field="campaign3Roas">2.61x</td><td><strong data-report-field="campaign3Status">Strong</strong></td></tr>
                         </tbody>
                       </table>
                     </div>
@@ -1551,7 +1768,7 @@
             <p class="section-kicker mb-4">Why Vividli</p>
             <h2 class="section-title mb-6">Your revenue protection system.</h2>
             <p class="section-copy max-w-xl">
-              Agencies do not only lose clients because of bad results. They lose clients when the value is invisible, late, or hard to explain.
+              Agencies don't lose clients because of bad results &mdash; they lose them because clients don't understand the results. Vividli fixes that.
             </p>
           </div>
 
@@ -1751,10 +1968,6 @@
           <h2 class="max-w-2xl text-3xl font-black leading-tight text-white sm:text-4xl">Show the value before your next invoice lands.</h2>
         </div>
         <div class="flex flex-col gap-3 sm:flex-row" data-reveal="right">
-          <button type="button" onclick="openReportModal()" class="btn btn-secondary px-6 py-4">
-            <i class="fa-regular fa-eye"></i>
-            Preview Sample
-          </button>
           <a href="https://calendly.com/loganmonahan57/30min" class="btn btn-primary px-6 py-4">
             <i class="fa-regular fa-calendar"></i>
             Book Demo
@@ -1794,15 +2007,15 @@
 
         <div class="space-y-10 bg-white p-8 leading-relaxed text-zinc-800">
           <p>Hi Logan,</p>
-          <p>Here's a complete picture of what your advertising delivered this month: every dollar tracked, every result explained.</p>
+          <p data-report-field="intro">Here's a complete picture of what your advertising delivered this month: every dollar tracked, every result explained.</p>
 
           <div>
             <h3 class="mb-4 text-xs font-bold uppercase tracking-widest text-zinc-500">Performance at a Glance</h3>
             <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
-              <div class="rounded-[8px] bg-zinc-100 p-5 text-center"><div class="text-2xl font-bold">$7,051.95</div><div class="text-xs text-emerald-600">+12.3% vs last month</div><div class="text-xs text-zinc-500">AD SPEND</div></div>
-              <div class="rounded-[8px] bg-zinc-100 p-5 text-center"><div class="text-2xl font-bold">$30,534.94</div><div class="text-xs text-emerald-600">+18.5% vs last month</div><div class="text-xs text-zinc-500">REVENUE</div></div>
-              <div class="rounded-[8px] bg-zinc-100 p-5 text-center"><div class="text-2xl font-bold">4.33x</div><div class="text-xs text-amber-600">-2.7% vs last month</div><div class="text-xs text-zinc-500">ROAS</div></div>
-              <div class="rounded-[8px] bg-zinc-100 p-5 text-center"><div class="text-2xl font-bold">270</div><div class="text-xs text-emerald-600">+16.4% vs last month</div><div class="text-xs text-zinc-500">CONVERSIONS</div></div>
+              <div class="rounded-[8px] bg-zinc-100 p-5 text-center"><div class="text-2xl font-bold" data-report-field="spendValue">$7,051.95</div><div class="text-xs text-emerald-600" data-report-field="spendChange">+12.3% vs last month</div><div class="text-xs text-zinc-500">AD SPEND</div></div>
+              <div class="rounded-[8px] bg-zinc-100 p-5 text-center"><div class="text-2xl font-bold" data-report-field="revenueValue">$30,534.94</div><div class="text-xs text-emerald-600" data-report-field="revenueChange">+18.5% vs last month</div><div class="text-xs text-zinc-500">REVENUE</div></div>
+              <div class="rounded-[8px] bg-zinc-100 p-5 text-center"><div class="text-2xl font-bold" data-report-field="roasValue">4.33x</div><div class="text-xs text-amber-600" data-report-field="roasChange">-2.7% vs last month</div><div class="text-xs text-zinc-500">ROAS</div></div>
+              <div class="rounded-[8px] bg-zinc-100 p-5 text-center"><div class="text-2xl font-bold" data-report-field="conversionsValue">270</div><div class="text-xs text-emerald-600" data-report-field="conversionsChange">+16.4% vs last month</div><div class="text-xs text-zinc-500">CONVERSIONS</div></div>
             </div>
           </div>
 
@@ -1814,18 +2027,18 @@
           <div>
             <h3 class="mb-4 text-xs font-bold uppercase tracking-widest text-zinc-500">Our Analysis</h3>
             <div class="space-y-4 rounded-r-[8px] border-l-4 border-[#2979FF] bg-zinc-50 p-6 text-sm leading-7 text-zinc-700">
-              <p>Strong month. You grew revenue to $12.4k while actually spending less, and that pushed your blended ROAS up to 4.1x. More conversions, better efficiency, lower spend. That is the combination you want to see.</p>
-              <p>Retargeting - 30d did the heavy lifting. It returned $4.6k on $1.2k in spend, landing right at the account average and carrying a disproportionate share of the month's results.</p>
-              <p>Prospecting - Broad and Lookalike - Top 1% both came in below the account average, at 2.8x and 2.6x respectively. These campaigns are the engine that feeds retargeting over time, so they are worth a close look rather than a quick fix.</p>
+              <p data-report-field="analysis1">Strong month. You grew revenue to $12.4k while actually spending less, and that pushed your blended ROAS up to 4.1x. More conversions, better efficiency, lower spend. That is the combination you want to see.</p>
+              <p data-report-field="analysis2">Retargeting - 30d did the heavy lifting. It returned $4.6k on $1.2k in spend, landing right at the account average and carrying a disproportionate share of the month's results.</p>
+              <p data-report-field="analysis3">Prospecting - Broad and Lookalike - Top 1% both came in below the account average, at 2.8x and 2.6x respectively. These campaigns are the engine that feeds retargeting over time, so they are worth a close look rather than a quick fix.</p>
             </div>
           </div>
 
           <div>
             <h3 class="mb-4 text-xs font-bold uppercase tracking-widest text-zinc-500">Potential Opportunities</h3>
             <div class="space-y-3">
-              <div class="flex gap-4 rounded-[8px] bg-zinc-50 p-5 text-sm leading-7 text-zinc-700"><span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#2979FF] text-xs font-bold text-white">1</span><p>Based on this month's numbers, it may be worth tightening the audience on Prospecting - Broad. At 2.8x ROAS it is spending efficiently but trailing the account average.</p></div>
-              <div class="flex gap-4 rounded-[8px] bg-zinc-50 p-5 text-sm leading-7 text-zinc-700"><span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#2979FF] text-xs font-bold text-white">2</span><p>The data points toward a budget rebalance worth considering. Retargeting - 30d is your strongest performer at 4.2x and only received $1.2k in spend.</p></div>
-              <div class="flex gap-4 rounded-[8px] bg-zinc-50 p-5 text-sm leading-7 text-zinc-700"><span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#2979FF] text-xs font-bold text-white">3</span><p>A strong opportunity here could be reviewing the creative and offer on Lookalike - Top 1%. Lookalike audiences usually respond well to creative that mirrors what converted existing customers.</p></div>
+              <div class="flex gap-4 rounded-[8px] bg-zinc-50 p-5 text-sm leading-7 text-zinc-700"><span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#2979FF] text-xs font-bold text-white">1</span><p data-report-field="opportunity1">Based on this month's numbers, it may be worth tightening the audience on Prospecting - Broad. At 2.8x ROAS it is spending efficiently but trailing the account average.</p></div>
+              <div class="flex gap-4 rounded-[8px] bg-zinc-50 p-5 text-sm leading-7 text-zinc-700"><span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#2979FF] text-xs font-bold text-white">2</span><p data-report-field="opportunity2">The data points toward a budget rebalance worth considering. Retargeting - 30d is your strongest performer at 4.2x and only received $1.2k in spend.</p></div>
+              <div class="flex gap-4 rounded-[8px] bg-zinc-50 p-5 text-sm leading-7 text-zinc-700"><span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#2979FF] text-xs font-bold text-white">3</span><p data-report-field="opportunity3">A strong opportunity here could be reviewing the creative and offer on Lookalike - Top 1%. Lookalike audiences usually respond well to creative that mirrors what converted existing customers.</p></div>
             </div>
           </div>
 
@@ -1843,9 +2056,9 @@
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-zinc-100 text-zinc-800">
-                  <tr><td class="px-4 py-3 font-bold">Prospecting - Broad</td><td class="px-4 py-3">$1,064.17</td><td class="px-4 py-3">$2,989.61</td><td class="px-4 py-3">2.8x</td><td class="px-4 py-3"><span class="font-bold uppercase tracking-wide text-emerald-600">Strong</span></td></tr>
-                  <tr><td class="px-4 py-3 font-bold">Retargeting - 30d</td><td class="px-4 py-3">$1,216.20</td><td class="px-4 py-3">$4,550.01</td><td class="px-4 py-3">4.17x</td><td class="px-4 py-3"><span class="font-bold uppercase tracking-wide text-emerald-600">Strong</span></td></tr>
-                  <tr><td class="px-4 py-3 font-bold">Lookalike - Top 1%</td><td class="px-4 py-3">$760.12</td><td class="px-4 py-3">$1,549.05</td><td class="px-4 py-3">2.61x</td><td class="px-4 py-3"><span class="font-bold uppercase tracking-wide text-emerald-600">Strong</span></td></tr>
+                  <tr><td class="px-4 py-3 font-bold" data-report-field="campaign1Name">Prospecting - Broad</td><td class="px-4 py-3" data-report-field="campaign1Spend">$1,064.17</td><td class="px-4 py-3" data-report-field="campaign1Revenue">$2,989.61</td><td class="px-4 py-3" data-report-field="campaign1Roas">2.8x</td><td class="px-4 py-3"><span class="font-bold uppercase tracking-wide text-emerald-600" data-report-field="campaign1Status">Strong</span></td></tr>
+                  <tr><td class="px-4 py-3 font-bold" data-report-field="campaign2Name">Retargeting - 30d</td><td class="px-4 py-3" data-report-field="campaign2Spend">$1,216.20</td><td class="px-4 py-3" data-report-field="campaign2Revenue">$4,550.01</td><td class="px-4 py-3" data-report-field="campaign2Roas">4.17x</td><td class="px-4 py-3"><span class="font-bold uppercase tracking-wide text-emerald-600" data-report-field="campaign2Status">Strong</span></td></tr>
+                  <tr><td class="px-4 py-3 font-bold" data-report-field="campaign3Name">Lookalike - Top 1%</td><td class="px-4 py-3" data-report-field="campaign3Spend">$760.12</td><td class="px-4 py-3" data-report-field="campaign3Revenue">$1,549.05</td><td class="px-4 py-3" data-report-field="campaign3Roas">2.61x</td><td class="px-4 py-3"><span class="font-bold uppercase tracking-wide text-emerald-600" data-report-field="campaign3Status">Strong</span></td></tr>
                 </tbody>
               </table>
             </div>
@@ -1886,17 +2099,179 @@
 
     document.querySelectorAll('[data-reveal], .stagger').forEach((el) => revealObserver.observe(el));
 
-    const workflow = document.querySelector('[data-observe-workflow]');
-    if (workflow) {
-      const workflowObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          workflow.classList.add('visible');
-          workflowObserver.unobserve(workflow);
+    const workflowObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('visible');
+        workflowObserver.unobserve(entry.target);
+      });
+    }, { threshold: 0.28 });
+
+    document.querySelectorAll('[data-observe-workflow]').forEach((el) => workflowObserver.observe(el));
+
+    const reportScenarios = {
+      good: {
+        scenarioLabel: 'Good month',
+        scenarioSummary: 'A strong month where Vividli reinforces momentum, explains why efficiency improved, and gives the client clear next steps.',
+        intro: "Here's a complete picture of what your advertising delivered this month: every dollar tracked, every result explained.",
+        spendValue: '$7,051.95',
+        spendChange: '+12.3% vs last month',
+        spendSentiment: 'positive',
+        revenueValue: '$30,534.94',
+        revenueChange: '+18.5% vs last month',
+        revenueSentiment: 'positive',
+        roasValue: '4.33x',
+        roasChange: '-2.7% vs last month',
+        roasSentiment: 'neutral',
+        conversionsValue: '270',
+        conversionsChange: '+16.4% vs last month',
+        conversionsSentiment: 'positive',
+        analysis1: 'Strong month. Revenue grew while spend stayed controlled, and that kept the account comfortably profitable. More conversions, healthy return, and clear momentum are exactly what you want to see before the next billing cycle.',
+        analysis2: 'Retargeting - 30d did the heavy lifting again. It turned a modest budget into a strong share of attributed revenue, which usually means the audience quality and offer are both doing their job.',
+        analysis3: 'Prospecting is still worth watching. Broad and Lookalike campaigns are feeding the funnel, but they are not matching retargeting efficiency yet. The account is in a good position, so this is a tuning moment rather than a rescue moment.',
+        opportunity1: 'Keep the retargeting budget protected while the audience is converting efficiently. It is currently the cleanest source of near-term return.',
+        opportunity2: 'Test a tighter version of Prospecting - Broad so cold traffic stays scalable without dragging blended ROAS down.',
+        opportunity3: 'Use the winning retargeting creative as a reference point for the next lookalike creative test.',
+        campaign1Name: 'Prospecting - Broad',
+        campaign1Spend: '$1,064.17',
+        campaign1Revenue: '$2,989.61',
+        campaign1Roas: '2.8x',
+        campaign1Status: 'Strong',
+        campaign2Name: 'Retargeting - 30d',
+        campaign2Spend: '$1,216.20',
+        campaign2Revenue: '$4,550.01',
+        campaign2Roas: '4.17x',
+        campaign2Status: 'Strong',
+        campaign3Name: 'Lookalike - Top 1%',
+        campaign3Spend: '$760.12',
+        campaign3Revenue: '$1,549.05',
+        campaign3Roas: '2.61x',
+        campaign3Status: 'Stable'
+      },
+      mixed: {
+        scenarioLabel: 'Mixed month',
+        scenarioSummary: 'A mixed month where Vividli separates what improved from what needs attention, so the client sees nuance instead of a vague summary.',
+        intro: 'This month had a useful split: revenue stayed healthy, but efficiency softened as spend increased across colder audiences. Here is what changed and where to focus next.',
+        spendValue: '$8,420.10',
+        spendChange: '+9.8% vs last month',
+        spendSentiment: 'neutral',
+        revenueValue: '$27,890.44',
+        revenueChange: '+2.4% vs last month',
+        revenueSentiment: 'positive',
+        roasValue: '3.31x',
+        roasChange: '-6.8% vs last month',
+        roasSentiment: 'negative',
+        conversionsValue: '238',
+        conversionsChange: '-3.1% vs last month',
+        conversionsSentiment: 'negative',
+        analysis1: 'Mixed month. Revenue still moved in the right direction, but it took more spend to get there. That means demand is present, while the account is working a little harder than it should to convert it.',
+        analysis2: 'Retargeting remained the strongest performer and kept the month stable. The softer blended ROAS is mostly coming from prospecting spend, where reach expanded faster than conversion quality.',
+        analysis3: 'Nothing here suggests panic. The right move is to preserve the campaigns that are still converting well, then tighten budget pacing and creative rotation in the parts of the account that got less efficient.',
+        opportunity1: 'Hold retargeting steady while it continues to convert above the account average.',
+        opportunity2: 'Review Prospecting - Broad budget pacing and exclude segments that are clicking but not converting.',
+        opportunity3: 'Refresh top-of-funnel creative to reduce fatigue before the next reporting period.',
+        campaign1Name: 'Prospecting - Broad',
+        campaign1Spend: '$2,840.55',
+        campaign1Revenue: '$7,130.12',
+        campaign1Roas: '2.51x',
+        campaign1Status: 'Needs tuning',
+        campaign2Name: 'Retargeting - 30d',
+        campaign2Spend: '$1,640.35',
+        campaign2Revenue: '$7,216.44',
+        campaign2Roas: '4.40x',
+        campaign2Status: 'Strong',
+        campaign3Name: 'Brand Search',
+        campaign3Spend: '$1,010.20',
+        campaign3Revenue: '$4,980.33',
+        campaign3Roas: '4.93x',
+        campaign3Status: 'Strong'
+      },
+      bad: {
+        scenarioLabel: 'Bad month',
+        scenarioSummary: 'A tough month where Vividli stays calm, explains the drop clearly, and gives the client a concrete recovery plan.',
+        intro: 'This was a harder month. Performance moved backwards across revenue, ROAS, and conversion volume, so the most useful thing is to be direct about what changed and what happens next.',
+        spendValue: '$6,980.25',
+        spendChange: '-4.2% vs last month',
+        spendSentiment: 'neutral',
+        revenueValue: '$15,210.80',
+        revenueChange: '-28.6% vs last month',
+        revenueSentiment: 'negative',
+        roasValue: '2.18x',
+        roasChange: '-24.9% vs last month',
+        roasSentiment: 'negative',
+        conversionsValue: '142',
+        conversionsChange: '-22.8% vs last month',
+        conversionsSentiment: 'negative',
+        analysis1: 'Tough month. Revenue and conversion volume both fell, and the account did not generate the same level of return from the available budget. The important thing is that the issue is visible early enough to act on it.',
+        analysis2: 'The biggest pressure came from cold acquisition. Prospecting spend did not translate into enough qualified traffic, and the lower conversion rate pulled blended ROAS down across the account.',
+        analysis3: 'Retargeting is still the most defensible part of the account, but it cannot carry the full month by itself. The next step is to reduce waste, tighten the cold audience plan, and test stronger offer-led creative.',
+        opportunity1: 'Reduce or pause the weakest cold audience set until creative and targeting are refreshed.',
+        opportunity2: 'Shift budget toward retargeting and brand search while recovery tests are running.',
+        opportunity3: 'Launch a focused creative test around the offer, proof points, and urgency rather than broad awareness messaging.',
+        campaign1Name: 'Prospecting - Broad',
+        campaign1Spend: '$2,350.40',
+        campaign1Revenue: '$4,066.19',
+        campaign1Roas: '1.73x',
+        campaign1Status: 'Needs review',
+        campaign2Name: 'Retargeting - 30d',
+        campaign2Spend: '$1,580.75',
+        campaign2Revenue: '$5,078.12',
+        campaign2Roas: '3.21x',
+        campaign2Status: 'Stable',
+        campaign3Name: 'Lookalike - Top 1%',
+        campaign3Spend: '$1,120.60',
+        campaign3Revenue: '$1,803.17',
+        campaign3Roas: '1.61x',
+        campaign3Status: 'Review'
+      }
+    };
+
+    const sentimentFields = {
+      spendChange: 'spendSentiment',
+      revenueChange: 'revenueSentiment',
+      roasChange: 'roasSentiment',
+      conversionsChange: 'conversionsSentiment'
+    };
+
+    const applySentiment = (el, sentiment) => {
+      if (el.classList.contains('report-kpi-change')) {
+        el.classList.remove('down', 'neutral');
+        if (sentiment === 'negative') el.classList.add('down');
+        if (sentiment === 'neutral') el.classList.add('neutral');
+      }
+
+      el.classList.remove('text-emerald-600', 'text-amber-600', 'text-red-600');
+      if (sentiment === 'negative') el.classList.add('text-red-600');
+      else if (sentiment === 'neutral') el.classList.add('text-amber-600');
+      else el.classList.add('text-emerald-600');
+    };
+
+    const applyReportScenario = (scenarioKey) => {
+      const scenario = reportScenarios[scenarioKey] || reportScenarios.good;
+
+      Object.entries(scenario).forEach(([field, value]) => {
+        if (field.endsWith('Sentiment')) return;
+
+        document.querySelectorAll(`[data-report-field="${field}"]`).forEach((el) => {
+          el.textContent = value;
+          if (sentimentFields[field]) {
+            applySentiment(el, scenario[sentimentFields[field]]);
+          }
         });
-      }, { threshold: 0.28 });
-      workflowObserver.observe(workflow);
-    }
+      });
+
+      document.querySelectorAll('[data-scenario-button]').forEach((button) => {
+        const isActive = button.dataset.scenarioButton === scenarioKey;
+        button.classList.toggle('active', isActive);
+        button.setAttribute('aria-pressed', String(isActive));
+      });
+    };
+
+    document.querySelectorAll('[data-scenario-button]').forEach((button) => {
+      button.addEventListener('click', () => applyReportScenario(button.dataset.scenarioButton));
+    });
+
+    applyReportScenario('good');
 
     const animateNumber = (el) => {
       if (el.dataset.counted) return;
