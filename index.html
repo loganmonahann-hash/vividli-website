@@ -821,37 +821,67 @@
       line-height: 1.45;
     }
 
-    .chart-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 1rem;
+    .report-support-card {
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,0.12);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.075), rgba(255,255,255,0.035)),
+        rgba(17, 20, 29, 0.7);
+      padding: 1.2rem;
     }
 
-    .mini-chart {
-      border: 1px solid rgba(255,255,255,0.12);
+    .report-support-card h3 {
+      color: white;
+      font-size: 1rem;
+      font-weight: 820;
+    }
+
+    .report-support-card p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.65;
+    }
+
+    .report-support-list {
+      display: grid;
+      gap: 0.8rem;
+      margin-top: 1.1rem;
+    }
+
+    .report-support-item {
+      display: grid;
+      grid-template-columns: 2.25rem 1fr;
+      gap: 0.8rem;
+      align-items: start;
+      border: 1px solid rgba(255,255,255,0.1);
       border-radius: var(--radius);
       overflow: hidden;
-      background: #eef2f7;
-      color: #111827;
-      transition: transform 220ms ease, box-shadow 220ms ease;
+      background: rgba(255,255,255,0.045);
+      padding: 0.85rem;
     }
 
-    .mini-chart:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 22px 55px rgba(0,0,0,0.26);
+    .report-support-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: var(--radius);
+      background: rgba(34, 211, 238, 0.11);
+      color: var(--brand-2);
     }
 
-    .mini-chart h3 {
-      padding: 0.9rem 1rem 0;
-      color: #1f2937;
-      font-size: 0.92rem;
-      font-weight: 780;
-    }
-
-    .mini-chart img {
+    .report-support-item strong {
       display: block;
-      width: 100%;
-      padding: 0.8rem;
+      color: white;
+      font-size: 0.9rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .report-support-item span {
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.55;
     }
 
     .impact-grid {
@@ -1078,7 +1108,6 @@
       .hero-copy { font-size: 1.08rem; }
       .metric-strip,
       .preview-shell,
-      .chart-grid,
       .impact-grid,
       .pricing-grid {
         grid-template-columns: 1fr;
@@ -1368,16 +1397,33 @@
               <span>Prioritized recommendations and campaign-level detail clients can act on.</span>
             </button>
 
-            <div class="chart-grid pt-4">
-              <article class="mini-chart" data-tilt>
-                <h3>ROAS Trend</h3>
-                <img src="roas_chart.png" alt="ROAS trend chart">
-              </article>
-              <article class="mini-chart" data-tilt>
-                <h3>Spend vs Revenue</h3>
-                <img src="spend_revenue_chart (1).png" alt="Spend versus attributed revenue chart">
-              </article>
-            </div>
+            <article class="report-support-card mt-4" data-tilt>
+              <h3>What changes every send</h3>
+              <p class="mt-2">The layout stays familiar for clients, while the substance updates around the newest billing moment and account performance.</p>
+              <div class="report-support-list">
+                <div class="report-support-item">
+                  <span class="report-support-icon"><i class="fa-regular fa-clock"></i></span>
+                  <div>
+                    <strong>Invoice-aware timing</strong>
+                    <span>Reports land before the payment conversation starts.</span>
+                  </div>
+                </div>
+                <div class="report-support-item">
+                  <span class="report-support-icon"><i class="fa-solid fa-database"></i></span>
+                  <div>
+                    <strong>Fresh account numbers</strong>
+                    <span>Spend, revenue, ROAS, conversions, and campaign status are pulled into the story.</span>
+                  </div>
+                </div>
+                <div class="report-support-item">
+                  <span class="report-support-icon"><i class="fa-solid fa-pen-nib"></i></span>
+                  <div>
+                    <strong>Plain-English next steps</strong>
+                    <span>Clients see what changed, why it matters, and what happens next.</span>
+                  </div>
+                </div>
+              </div>
+            </article>
           </div>
 
           <div class="report-browser" data-reveal="right">
