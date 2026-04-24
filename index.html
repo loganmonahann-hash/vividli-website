@@ -3,566 +3,1996 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vividli — Value Before The Bill</title>
+  <meta name="description" content="Vividli sends automated AI-powered performance reports before invoices land, helping agencies prove value and reduce churn.">
+  <title>Vividli | Value Before The Bill</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
-    html { scroll-behavior: smooth; overscroll-behavior: none; scroll-padding-top: 5rem; }
-    body { font-family: 'Inter', system-ui, sans-serif; overscroll-behavior: none; }
-    .hero-bg { background: linear-gradient(to bottom, #060d1a 0%, #0f172a 100%); }
-    .email-float {
-      border-radius: 24px;
+    :root {
+      --ink: #f6f8fb;
+      --muted: #a7afbd;
+      --dim: #6f7788;
+      --page: #07080d;
+      --panel: #11141d;
+      --panel-2: #171b25;
+      --line: rgba(255, 255, 255, 0.12);
+      --brand: #2979ff;
+      --brand-2: #22d3ee;
+      --mint: #48d597;
+      --sun: #f6c453;
+      --rose: #ff6b8a;
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 6rem;
+      background: var(--page);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background:
+        linear-gradient(180deg, rgba(7, 8, 13, 0.74), #07080d 38rem),
+        #07080d;
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    body.modal-open { overflow: hidden; }
+
+    img { max-width: 100%; }
+
+    a, button, summary { -webkit-tap-highlight-color: transparent; }
+
+    a:focus-visible,
+    button:focus-visible,
+    summary:focus-visible {
+      outline: 2px solid var(--brand-2);
+      outline-offset: 4px;
+    }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.28;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+      background-size: 72px 72px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.85), transparent 72%);
+    }
+
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 80;
+      width: var(--scroll-progress, 0%);
+      height: 3px;
+      background: linear-gradient(90deg, var(--brand), var(--mint), var(--sun));
+      box-shadow: 0 0 22px rgba(41, 121, 255, 0.55);
+    }
+
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 70;
+      border-bottom: 1px solid rgba(255,255,255,0.09);
+      background: rgba(7, 8, 13, 0.76);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .nav-link {
+      color: #c7cedb;
+      transition: color 180ms ease, background 180ms ease;
+    }
+
+    .nav-link:hover,
+    .nav-link.active { color: white; }
+
+    .nav-link.active {
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    .menu-panel {
+      max-height: 0;
       overflow: hidden;
-      box-shadow: 0 0 80px -10px rgba(41, 121, 255, 0.18), 0 30px 60px -20px rgba(0,0,0,0.6);
+      border-top: 1px solid transparent;
+      transition: max-height 260ms ease, border-color 260ms ease;
     }
-    .pro-glow { box-shadow: 0 0 40px -8px rgba(41, 121, 255, 0.35); }
 
-    /* Scroll animations */
-    .reveal {
+    .menu-panel.open {
+      max-height: 24rem;
+      border-color: rgba(255,255,255,0.09);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.65rem;
+      min-height: 3rem;
+      border-radius: var(--radius);
+      font-weight: 760;
+      line-height: 1;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease, color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      color: white;
+      background: linear-gradient(135deg, #2979ff, #1264e8);
+      box-shadow: 0 16px 36px rgba(41, 121, 255, 0.26);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 22px 44px rgba(41, 121, 255, 0.34);
+    }
+
+    .btn-secondary {
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .btn-secondary:hover {
+      border-color: rgba(34, 211, 238, 0.54);
+      background: rgba(34, 211, 238, 0.11);
+    }
+
+    .hero {
+      position: relative;
+      min-height: calc(100vh - 5rem);
+      overflow: hidden;
+      isolation: isolate;
+      display: flex;
+      align-items: center;
+      padding: 5rem 0 4rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -3;
+      background:
+        linear-gradient(90deg, rgba(7, 8, 13, 0.98) 0%, rgba(7, 8, 13, 0.94) 38%, rgba(7, 8, 13, 0.72) 66%, rgba(7, 8, 13, 0.96) 100%),
+        linear-gradient(145deg, rgba(41, 121, 255, 0.14), transparent 34%, rgba(72, 213, 151, 0.12) 72%, transparent),
+        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+      background-size: auto, auto, 96px 96px, 96px 96px;
+      filter: saturate(1.05);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      z-index: -2;
+      height: 34%;
+      background: linear-gradient(to bottom, transparent, #07080d);
+      pointer-events: none;
+    }
+
+    .hero-report-stack {
+      position: absolute;
+      right: max(1.5rem, calc((100vw - 76rem) / 2));
+      top: 8.8rem;
+      z-index: -1;
+      width: min(26rem, 34vw);
+      pointer-events: none;
+      perspective: 1200px;
+    }
+
+    [data-parallax] {
+      --parallax-y: 0px;
+      transform: translate3d(0, var(--parallax-y), 0);
+      will-change: transform;
+    }
+
+    .hero-float {
+      position: absolute;
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: rgba(17, 20, 29, 0.86);
+      box-shadow: 0 28px 72px rgba(0,0,0,0.45);
+    }
+
+    .hero-float.report {
+      position: relative;
+      width: 100%;
+      transform: rotateY(-10deg) rotateX(4deg) rotateZ(1deg);
+      opacity: 0.72;
+      max-height: 40rem;
+    }
+
+    .hero-email-preview {
+      color: #18202c;
+    }
+
+    .hero-float.chart-a {
+      width: 14.5rem;
+      right: -2.5rem;
+      top: 5rem;
+      transform: translate3d(0, var(--parallax-y, 0px), 0) rotate(4deg);
+    }
+
+    .hero-float.chart-b {
+      width: 15rem;
+      left: -4rem;
+      bottom: 4rem;
+      transform: translate3d(0, var(--parallax-y, 0px), 0) rotate(-5deg);
+    }
+
+    .hero-float > img {
+      display: block;
+      width: 100%;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.07);
+      color: #d5dbe6;
+      font-size: 0.78rem;
+      font-weight: 760;
+      line-height: 1;
+      padding: 0.55rem 0.85rem;
+    }
+
+    .pulse-dot {
+      width: 0.55rem;
+      height: 0.55rem;
+      border-radius: 999px;
+      background: var(--mint);
+      box-shadow: 0 0 0 0 rgba(72, 213, 151, 0.58);
+      animation: pulseDot 1.9s ease-out infinite;
+    }
+
+    @keyframes pulseDot {
+      70% { box-shadow: 0 0 0 0.55rem rgba(72, 213, 151, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(72, 213, 151, 0); }
+    }
+
+    .hero-title {
+      max-width: 46rem;
+      font-size: 5rem;
+      line-height: 0.92;
+      letter-spacing: 0;
+      font-weight: 900;
+    }
+
+    .hero-title span {
+      color: transparent;
+      background: linear-gradient(90deg, white, #9ec3ff 48%, #7af1c0);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    .hero-copy {
+      max-width: 43rem;
+      color: #cad1dd;
+      font-size: 1.28rem;
+      line-height: 1.65;
+    }
+
+    .metric-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1px;
+      max-width: 44rem;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.11);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.11);
+    }
+
+    .metric-strip > div {
+      padding: 1.1rem 1.2rem;
+      background: rgba(14, 17, 25, 0.74);
+      backdrop-filter: blur(18px);
+    }
+
+    .metric-value {
+      display: block;
+      color: white;
+      font-size: 1.45rem;
+      font-weight: 860;
+    }
+
+    .metric-label {
+      display: block;
+      margin-top: 0.25rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .next-peek {
+      position: absolute;
+      left: 50%;
+      bottom: 1.25rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      color: #c2cad7;
+      font-size: 0.82rem;
+      transform: translateX(-50%);
+    }
+
+    .next-peek i {
+      color: var(--brand-2);
+      animation: downNudge 1.4s ease-in-out infinite;
+    }
+
+    @keyframes downNudge {
+      50% { transform: translateY(4px); }
+    }
+
+    .section {
+      position: relative;
+      padding: 6.5rem 0;
+    }
+
+    .section-soft {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0) 28%),
+        #0b0d13;
+      border-block: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .section-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #7dd9ff;
+      font-size: 0.76rem;
+      font-weight: 820;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .section-kicker::before {
+      content: "";
+      width: 1.55rem;
+      height: 1px;
+      background: currentColor;
+      opacity: 0.7;
+    }
+
+    .section-title {
+      color: white;
+      font-size: 3rem;
+      line-height: 1.04;
+      font-weight: 860;
+      letter-spacing: 0;
+    }
+
+    .section-copy {
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+
+    .glass-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.035)),
+        rgba(17, 20, 29, 0.82);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.23);
+      transform-style: preserve-3d;
+      transition: transform 220ms ease, border-color 220ms ease, background 220ms ease, box-shadow 220ms ease;
+    }
+
+    .glass-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
       opacity: 0;
-      transform: translateY(32px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
+      pointer-events: none;
+      background: radial-gradient(circle at var(--mx, 50%) var(--my, 40%), rgba(255,255,255,0.18), transparent 28%);
+      transition: opacity 220ms ease;
     }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .reveal-delay-1 { transition-delay: 0.1s; }
-    .reveal-delay-2 { transition-delay: 0.2s; }
-    .reveal-delay-3 { transition-delay: 0.3s; }
-    .reveal-delay-4 { transition-delay: 0.4s; }
 
-    /* FAQ accordion */
-    details summary { list-style: none; cursor: pointer; }
+    .glass-card:hover {
+      border-color: rgba(34, 211, 238, 0.32);
+      box-shadow: 0 30px 74px rgba(0,0,0,0.3);
+      transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-4px);
+    }
+
+    .glass-card:hover::before { opacity: 1; }
+
+    .icon-box {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 3rem;
+      height: 3rem;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.07);
+      color: var(--brand-2);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+
+    .workflow {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .workflow::before {
+      content: "";
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      top: 3.95rem;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(41,121,255,0), rgba(41,121,255,0.6), rgba(72,213,151,0.55), rgba(246,196,83,0));
+      transform: scaleX(var(--workflow-progress, 0));
+      transform-origin: left;
+      transition: transform 700ms ease;
+    }
+
+    .workflow.visible::before { --workflow-progress: 1; }
+
+    .step-card {
+      min-height: 18rem;
+      padding: 1.25rem;
+    }
+
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.65rem;
+      height: 1.65rem;
+      border-radius: 999px;
+      color: #081018;
+      background: var(--mint);
+      font-size: 0.78rem;
+      font-weight: 900;
+    }
+
+    .preview-shell {
+      display: grid;
+      grid-template-columns: 0.92fr 1.08fr;
+      gap: 1.25rem;
+      align-items: start;
+    }
+
+    .report-browser {
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: var(--radius);
+      background: #f7f8fb;
+      color: #141923;
+      box-shadow: 0 32px 90px rgba(0,0,0,0.34);
+    }
+
+    .browser-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.85rem 1rem;
+      background: #10141f;
+    }
+
+    .browser-dot {
+      width: 0.7rem;
+      height: 0.7rem;
+      border-radius: 999px;
+      background: #ff6b8a;
+    }
+
+    .browser-dot:nth-child(2) { background: #f6c453; }
+    .browser-dot:nth-child(3) { background: #48d597; }
+
+    .report-window {
+      position: relative;
+      max-height: 43rem;
+      overflow: hidden;
+      background: white;
+    }
+
+    .report-document {
+      background: white;
+      color: #202632;
+      font-size: 1rem;
+      line-height: 1.55;
+    }
+
+    .report-window .report-document {
+      transform: translateY(var(--report-shift, 0));
+      transition: transform 420ms cubic-bezier(.2,.75,.25,1);
+    }
+
+    .report-window::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 10rem;
+      background: linear-gradient(to bottom, transparent, white);
+      pointer-events: none;
+    }
+
+    .report-document-header {
+      display: flex;
+      min-height: 12.5rem;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 2rem;
+      background: linear-gradient(135deg, #101827, #16395f);
+      color: white;
+      padding: 2rem;
+    }
+
+    .report-document-topline {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1.5rem;
+      font-size: 0.84rem;
+    }
+
+    .report-document-logo {
+      height: 1.7rem;
+      width: auto;
+      filter: brightness(0) invert(1);
+    }
+
+    .report-document-date {
+      text-align: right;
+      color: rgba(255,255,255,0.72);
+    }
+
+    .report-document-title {
+      max-width: 24rem;
+      font-size: 2rem;
+      font-weight: 860;
+      line-height: 1.1;
+      color: white;
+    }
+
+    .report-document-title span {
+      color: #54caff;
+    }
+
+    .report-invoice {
+      border-left: 4px solid #f2a900;
+      background: #fff1bc;
+      color: #402b04;
+      padding: 0.9rem 2rem;
+      font-size: 0.9rem;
+      font-weight: 780;
+    }
+
+    .report-document-body {
+      display: grid;
+      gap: 2rem;
+      padding: 2rem;
+      background: white;
+    }
+
+    .report-copy {
+      color: #384152;
+    }
+
+    .report-section-label {
+      color: #737b8a;
+      font-size: 0.72rem;
+      font-weight: 860;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .report-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.8rem;
+    }
+
+    .report-kpi {
+      border: 1px solid #edf0f4;
+      border-radius: var(--radius);
+      background: #f7f8fa;
+      padding: 1rem;
+    }
+
+    .report-kpi::before {
+      content: "";
+      display: block;
+      width: 1.4rem;
+      height: 0.16rem;
+      margin-bottom: 0.7rem;
+      border-radius: 999px;
+      background: #2979ff;
+    }
+
+    .report-kpi-value {
+      color: #1d2430;
+      font-size: 1.35rem;
+      font-weight: 860;
+      line-height: 1;
+    }
+
+    .report-kpi-change {
+      margin-top: 0.3rem;
+      color: #0ca66b;
+      font-size: 0.72rem;
+      font-weight: 760;
+    }
+
+    .report-kpi-change.down {
+      color: #e15b5b;
+    }
+
+    .report-kpi-label {
+      margin-top: 0.3rem;
+      color: #788190;
+      font-size: 0.68rem;
+      font-weight: 820;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .report-chart-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .report-chart-panel,
+    .report-analysis,
+    .report-opportunity,
+    .report-table-wrap {
+      border-radius: var(--radius);
+      background: #f6f8fb;
+    }
+
+    .report-chart-panel {
+      padding: 1rem;
+    }
+
+    .report-chart-panel h4 {
+      margin-bottom: 0.8rem;
+      color: #2b3340;
+      font-size: 0.9rem;
+      font-weight: 820;
+    }
+
+    .report-chart-panel img {
+      display: block;
+      width: 100%;
+      border-radius: 6px;
+    }
+
+    .report-analysis {
+      border-left: 4px solid var(--brand);
+      padding: 1.2rem;
+      color: #485163;
+      font-size: 0.92rem;
+    }
+
+    .report-opportunity-list {
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .report-opportunity {
+      display: flex;
+      gap: 0.8rem;
+      padding: 1rem;
+      color: #485163;
+      font-size: 0.88rem;
+    }
+
+    .report-opportunity span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.6rem;
+      height: 1.6rem;
+      flex: 0 0 auto;
+      border-radius: 999px;
+      background: var(--brand);
+      color: white;
+      font-size: 0.72rem;
+      font-weight: 860;
+    }
+
+    .report-table-wrap {
+      overflow: hidden;
+      border: 1px solid #e6eaf0;
+      font-size: 0.78rem;
+    }
+
+    .report-table-wrap table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .report-table-wrap th,
+    .report-table-wrap td {
+      padding: 0.72rem 0.85rem;
+      text-align: left;
+      border-bottom: 1px solid #ebeff5;
+    }
+
+    .report-table-wrap th {
+      background: white;
+      color: #6f7886;
+      font-size: 0.68rem;
+      font-weight: 860;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .report-table-wrap tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .hero-email-preview .report-document {
+      font-size: 0.74rem;
+    }
+
+    .hero-email-preview .report-document-header {
+      min-height: 9.2rem;
+      padding: 1.25rem;
+    }
+
+    .hero-email-preview .report-document-title {
+      font-size: 1.35rem;
+    }
+
+    .hero-email-preview .report-invoice {
+      padding: 0.65rem 1.25rem;
+      font-size: 0.68rem;
+    }
+
+    .hero-email-preview .report-document-body {
+      gap: 1.2rem;
+      padding: 1.25rem;
+    }
+
+    .hero-email-preview .report-kpi-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .hero-email-preview .report-chart-grid,
+    .hero-email-preview .report-analysis,
+    .hero-email-preview .report-opportunity-list,
+    .hero-email-preview .report-table-wrap {
+      display: none;
+    }
+
+    .tab-button {
+      width: 100%;
+      min-height: 5.25rem;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.045);
+      color: #dce2eb;
+      text-align: left;
+      padding: 1rem;
+      transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
+    }
+
+    .tab-button:hover {
+      transform: translateX(4px);
+      border-color: rgba(34, 211, 238, 0.3);
+    }
+
+    .tab-button.active {
+      border-color: rgba(72, 213, 151, 0.48);
+      background: rgba(72, 213, 151, 0.11);
+    }
+
+    .tab-button strong {
+      display: block;
+      color: white;
+      margin-bottom: 0.35rem;
+    }
+
+    .tab-button span {
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+
+    .chart-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .mini-chart {
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: #eef2f7;
+      color: #111827;
+      transition: transform 220ms ease, box-shadow 220ms ease;
+    }
+
+    .mini-chart:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 22px 55px rgba(0,0,0,0.26);
+    }
+
+    .mini-chart h3 {
+      padding: 0.9rem 1rem 0;
+      color: #1f2937;
+      font-size: 0.92rem;
+      font-weight: 780;
+    }
+
+    .mini-chart img {
+      display: block;
+      width: 100%;
+      padding: 0.8rem;
+    }
+
+    .impact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .impact-stat {
+      padding: 1.25rem;
+    }
+
+    .impact-number {
+      color: white;
+      font-size: 2.3rem;
+      font-weight: 880;
+      line-height: 1;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .price-card {
+      padding: 2rem;
+    }
+
+    .price-card.featured {
+      border-color: rgba(72, 213, 151, 0.42);
+      background:
+        linear-gradient(180deg, rgba(72, 213, 151, 0.13), rgba(255,255,255,0.035)),
+        rgba(17, 20, 29, 0.88);
+      box-shadow: 0 28px 84px rgba(72, 213, 151, 0.12), 0 24px 60px rgba(0,0,0,0.22);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 1px solid rgba(255,255,255,0.13);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.065);
+      color: #d4dbe7;
+      font-size: 0.75rem;
+      font-weight: 760;
+      padding: 0.48rem 0.72rem;
+    }
+
+    details {
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.045);
+      overflow: hidden;
+      transition: background 180ms ease, border-color 180ms ease;
+    }
+
+    details:hover,
+    details[open] {
+      border-color: rgba(34, 211, 238, 0.26);
+      background: rgba(255,255,255,0.065);
+    }
+
+    details summary {
+      list-style: none;
+      cursor: pointer;
+    }
+
     details summary::-webkit-details-marker { display: none; }
-    details[open] .chevron { transform: rotate(180deg); }
-    .chevron { transition: transform 0.3s ease; }
 
-    /* Modal */
+    details .faq-answer {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 240ms ease;
+    }
+
+    details[open] .faq-answer { grid-template-rows: 1fr; }
+
+    details .faq-answer > div { overflow: hidden; }
+
+    details .chevron {
+      color: var(--brand-2);
+      transition: transform 220ms ease;
+    }
+
+    details[open] .chevron { transform: rotate(180deg); }
+
+    .footer-cta {
+      position: relative;
+      overflow: hidden;
+      border-block: 1px solid rgba(255,255,255,0.09);
+      background:
+        linear-gradient(120deg, rgba(41,121,255,0.18), rgba(72,213,151,0.1), rgba(246,196,83,0.08)),
+        #0b0d13;
+    }
+
+    .email-float {
+      overflow: hidden;
+      border-radius: var(--radius);
+      box-shadow: 0 0 80px -10px rgba(41, 121, 255, 0.2), 0 30px 70px -25px rgba(0,0,0,0.65);
+    }
+
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(5,10,20,0.82);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      z-index: 200;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
+      z-index: 100;
+      display: grid;
+      place-items: start center;
       padding: 2rem 1rem 3rem;
+      overflow-y: auto;
+      background: rgba(7, 8, 13, 0.82);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.2s ease;
-      overflow-y: auto;
+      transition: opacity 220ms ease;
     }
+
     .modal-overlay.open {
       opacity: 1;
       pointer-events: all;
     }
+
     .modal-inner {
-      width: 100%;
-      max-width: 52rem;
-      transform: scale(0.96) translateY(12px);
+      width: min(52rem, 100%);
+      margin: 0 auto;
+      transform: translateY(18px) scale(0.98);
       opacity: 0;
-      transition: transform 0.25s ease, opacity 0.25s ease;
-      margin: auto;
-      position: relative;
+      transition: transform 260ms ease, opacity 260ms ease;
     }
+
     .modal-overlay.open .modal-inner {
-      transform: scale(1) translateY(0);
+      transform: translateY(0) scale(1);
       opacity: 1;
     }
+
     .modal-close {
       position: sticky;
       top: 0;
-      z-index: 10;
+      z-index: 3;
       display: flex;
       justify-content: flex-end;
-      margin-bottom: -1px;
-    }
-    .modal-close button {
-      background: #1e293b;
-      border: 1px solid rgba(255,255,255,0.1);
-      color: #cbd5e1;
-      border-radius: 999px;
-      width: 2.25rem;
-      height: 2.25rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: background 0.15s, color 0.15s;
       margin-bottom: 0.75rem;
     }
-    .modal-close button:hover { background: #334155; color: white; }
-    .modal-close button:focus-visible { outline: 2px solid #2979FF; outline-offset: 2px; }
+
+    .modal-close button {
+      width: 2.7rem;
+      height: 2.7rem;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: var(--radius);
+      background: rgba(17, 20, 29, 0.92);
+      color: white;
+      transition: transform 180ms ease, background 180ms ease;
+    }
+
+    .modal-close button:hover {
+      transform: translateY(-2px);
+      background: rgba(41, 121, 255, 0.26);
+    }
+
+    [data-reveal] {
+      opacity: 0;
+      transform: translate3d(0, 24px, 0);
+      transition: opacity 700ms ease, transform 700ms cubic-bezier(.2,.75,.25,1);
+      transition-delay: var(--delay, 0ms);
+      will-change: opacity, transform;
+    }
+
+    .delay-90 { --delay: 90ms; }
+    .delay-180 { --delay: 180ms; }
+    .delay-270 { --delay: 270ms; }
+    .delay-360 { --delay: 360ms; }
+
+    [data-reveal="left"] { transform: translate3d(-28px, 0, 0); }
+    [data-reveal="right"] { transform: translate3d(28px, 0, 0); }
+    [data-reveal="zoom"] { transform: scale(0.96); }
+
+    [data-reveal].visible {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    .stagger > * {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 600ms ease, transform 600ms cubic-bezier(.2,.75,.25,1);
+    }
+
+    .stagger.visible > * {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .stagger.visible > *:nth-child(2) { transition-delay: 90ms; }
+    .stagger.visible > *:nth-child(3) { transition-delay: 180ms; }
+    .stagger.visible > *:nth-child(4) { transition-delay: 270ms; }
+    .stagger.visible > *:nth-child(5) { transition-delay: 360ms; }
+    .stagger.visible > *:nth-child(6) { transition-delay: 450ms; }
+
+    @media (max-width: 1100px) {
+      .hero-title { font-size: 4.1rem; }
+      .hero-report-stack { opacity: 0.48; width: min(24rem, 42vw); }
+      .workflow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .workflow::before { display: none; }
+    }
+
+    @media (max-width: 860px) {
+      html { scroll-padding-top: 5rem; }
+      .hero {
+        min-height: auto;
+        padding: 4rem 0 5.5rem;
+      }
+      .hero::before {
+        background:
+          linear-gradient(180deg, rgba(7, 8, 13, 0.88), rgba(7, 8, 13, 0.97) 62%, #07080d),
+          linear-gradient(145deg, rgba(41, 121, 255, 0.18), transparent 46%, rgba(72, 213, 151, 0.12)),
+          linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+        background-size: auto, auto, 72px 72px, 72px 72px;
+      }
+      .hero-report-stack { display: none; }
+      .hero-title { font-size: 3.2rem; }
+      .hero-copy { font-size: 1.08rem; }
+      .metric-strip,
+      .preview-shell,
+      .chart-grid,
+      .impact-grid,
+      .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+      .section { padding: 4.75rem 0; }
+      .section-title { font-size: 2.35rem; }
+      .next-peek { display: none; }
+    }
+
+    @media (max-width: 640px) {
+      .hero-title { font-size: 2.7rem; }
+      .metric-strip > div { padding: 1rem; }
+      .workflow { grid-template-columns: 1fr; }
+      .step-card { min-height: auto; }
+      .price-card { padding: 1.35rem; }
+      .modal-overlay { padding: 1rem 0.6rem 2rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.001ms !important;
+      }
+
+      [data-reveal],
+      .stagger > * {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+
+    }
   </style>
 </head>
-<body class="bg-slate-900 text-zinc-200">
+<body>
+  <div class="scroll-progress" aria-hidden="true"></div>
+  <div class="noise" aria-hidden="true"></div>
 
-  <!-- Navbar -->
-  <nav class="border-b border-slate-700/60 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <img src="logo.png" 
-             alt="Vividli Logo" 
-             class="h-10 w-auto">
+  <nav class="site-nav" aria-label="Primary navigation">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
+      <a href="#top" class="flex items-center gap-3" aria-label="Vividli home">
+        <img src="logo.png" alt="Vividli" class="h-9 w-auto">
+      </a>
+
+      <div class="hidden items-center gap-1 rounded-[8px] border border-white/10 bg-white/[0.04] p-1 text-sm font-semibold lg:flex">
+        <a href="#how" class="nav-link rounded-[6px] px-4 py-2" data-nav-link>How it Works</a>
+        <a href="#example" class="nav-link rounded-[6px] px-4 py-2" data-nav-link>Report</a>
+        <a href="#impact" class="nav-link rounded-[6px] px-4 py-2" data-nav-link>Impact</a>
+        <a href="#pricing" class="nav-link rounded-[6px] px-4 py-2" data-nav-link>Pricing</a>
+        <a href="#faq" class="nav-link rounded-[6px] px-4 py-2" data-nav-link>FAQ</a>
       </div>
-      <div class="flex items-center gap-8 text-sm font-medium">
-        <a href="#how" class="hover:text-white">How it Works</a>
-        <a href="#example" class="hover:text-white">Example</a>
-        <a href="#pricing" class="hover:text-white">Pricing</a>
-        <a href="#faq" class="hover:text-white">FAQ</a>
+
+      <div class="hidden items-center gap-3 lg:flex">
+        <button type="button" class="btn btn-secondary h-11 px-4 text-sm" onclick="openReportModal()">
+          <i class="fa-regular fa-eye"></i>
+          Preview Report
+        </button>
+        <a href="https://calendly.com/loganmonahan57/30min" class="btn btn-primary h-11 px-5 text-sm">
+          <i class="fa-regular fa-calendar"></i>
+          Book Demo
+        </a>
       </div>
-      <button onclick="window.location.href='https://calendly.com/loganmonahan57/30min'" 
-              class="bg-[#2979FF] hover:bg-[#1565C0] px-6 py-3 rounded-2xl font-semibold transition">
-        Book Demo
+
+      <button id="menu-toggle" type="button" class="btn btn-secondary h-11 w-11 lg:hidden" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
+        <i class="fa-solid fa-bars"></i>
       </button>
+    </div>
+
+    <div id="mobile-menu" class="menu-panel lg:hidden">
+      <div class="mx-auto grid max-w-7xl gap-2 px-5 py-4">
+        <a href="#how" class="nav-link rounded-[6px] px-3 py-3" data-mobile-link>How it Works</a>
+        <a href="#example" class="nav-link rounded-[6px] px-3 py-3" data-mobile-link>Report</a>
+        <a href="#impact" class="nav-link rounded-[6px] px-3 py-3" data-mobile-link>Impact</a>
+        <a href="#pricing" class="nav-link rounded-[6px] px-3 py-3" data-mobile-link>Pricing</a>
+        <a href="#faq" class="nav-link rounded-[6px] px-3 py-3" data-mobile-link>FAQ</a>
+        <div class="grid grid-cols-1 gap-3 pt-2 sm:grid-cols-2">
+          <button type="button" class="btn btn-secondary px-4 py-3" onclick="openReportModal()">
+            <i class="fa-regular fa-eye"></i>
+            Preview Report
+          </button>
+          <a href="https://calendly.com/loganmonahan57/30min" class="btn btn-primary px-4 py-3">
+            <i class="fa-regular fa-calendar"></i>
+            Book Demo
+          </a>
+        </div>
+      </div>
     </div>
   </nav>
 
-  <!-- Hero -->
-  <section class="hero-bg py-24">
-    <div class="max-w-5xl mx-auto px-6 text-center">
-      <img src="logo.png"
-           alt="Vividli"
-           class="h-[5.6rem] mx-auto mb-8 opacity-90 reveal">
-
-      <h1 class="text-6xl font-bold leading-tight mb-6 reveal reveal-delay-1">
-        Show your clients the value<br>
-        <span class="text-[#2979FF]">before</span> the invoice arrives.
-      </h1>
-      <p class="text-2xl text-zinc-400 max-w-2xl mx-auto mb-10 reveal reveal-delay-2">
-        Automated AI-powered performance reports sent the day before billing.<br>
-        Reduce churn. Prove ROI. Build trust.
-      </p>
-      <div class="flex justify-center gap-4 reveal reveal-delay-3">
-        <button onclick="window.location.href='https://calendly.com/loganmonahan57/30min'"
-                class="bg-white text-zinc-900 px-8 py-4 rounded-3xl font-semibold text-lg flex items-center gap-3 hover:scale-105 transition">
-          <i class="fa-solid fa-play"></i>
-          Watch 2-min Demo
-        </button>
-        <button onclick="window.location.href='https://calendly.com/loganmonahan57/30min'" class="border border-[#2979FF]/50 text-zinc-200 px-8 py-4 rounded-3xl font-semibold text-lg hover:bg-[#2979FF] hover:text-white hover:border-[#2979FF] transition">
-          Start 30-day Pilot — $149/mo
-        </button>
-      </div>
-      <p class="text-zinc-500 text-sm mt-6 reveal reveal-delay-4">Currently onboarding a small number of agencies for early access.</p>
-    </div>
-  </section>
-
-  <!-- How It Works -->
-  <section id="how" class="py-20 bg-slate-900">
-    <div class="max-w-6xl mx-auto px-6">
-      <h2 class="text-4xl font-semibold text-center mb-4 reveal">How Vividli Works</h2>
-      <p class="text-center text-zinc-400 mb-16 max-w-xl mx-auto reveal reveal-delay-1">
-        Simple, automated, and runs every day without you lifting a finger.
-      </p>
-
-      <div class="relative">
-        <!-- Connector line between steps -->
-        <div class="hidden md:block absolute top-7 left-[12.5%] right-[12.5%] h-px bg-slate-700/80 z-0"></div>
-
-        <div class="grid md:grid-cols-4 gap-10">
-
-          <div class="text-center reveal reveal-delay-1">
-            <div class="relative z-10 w-14 h-14 mx-auto bg-slate-800 border border-slate-700 rounded-2xl flex items-center justify-center text-[#2979FF] mb-5">
-              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>
-              <span class="absolute -top-2.5 -right-2.5 w-5 h-5 bg-[#2979FF] text-white rounded-full text-xs font-bold flex items-center justify-center leading-none">1</span>
+  <main id="top">
+    <section class="hero">
+      <div class="hero-report-stack" aria-hidden="true" data-parallax data-speed="-0.09">
+        <div class="hero-email-preview hero-float report">
+          <div class="report-document">
+            <div class="report-document-header">
+              <div class="report-document-topline">
+                <img src="logo.png" alt="" class="report-document-logo">
+                <div class="report-document-date">
+                  <div>21 Mar - 19 Apr 2026</div>
+                  <div>Monthly Performance Report</div>
+                </div>
+              </div>
+              <h2 class="report-document-title">Your results are in,<br><span>Acme Digital.</span></h2>
             </div>
-            <h3 class="font-semibold text-sm mb-2 text-zinc-100">Daily Check</h3>
-            <p class="text-zinc-500 text-sm leading-relaxed">Checks Stripe each morning for invoices due tomorrow.</p>
-          </div>
-
-          <div class="text-center reveal reveal-delay-2">
-            <div class="relative z-10 w-14 h-14 mx-auto bg-slate-800 border border-slate-700 rounded-2xl flex items-center justify-center text-[#2979FF] mb-5">
-              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
-              <span class="absolute -top-2.5 -right-2.5 w-5 h-5 bg-[#2979FF] text-white rounded-full text-xs font-bold flex items-center justify-center leading-none">2</span>
+            <div class="report-invoice">Invoice due tomorrow: AUD $99.00. Questions? Just reply to this email.</div>
+            <div class="report-document-body">
+              <p class="report-copy">Hi Logan,</p>
+              <p class="report-copy">Here's a complete picture of what your advertising delivered this month: every dollar tracked, every result explained.</p>
+              <div>
+                <h3 class="report-section-label mb-4">Performance at a Glance</h3>
+                <div class="report-kpi-grid">
+                  <div class="report-kpi">
+                    <div class="report-kpi-value">$7,051.95</div>
+                    <div class="report-kpi-change">+12.3% vs last month</div>
+                    <div class="report-kpi-label">Ad Spend</div>
+                  </div>
+                  <div class="report-kpi">
+                    <div class="report-kpi-value">$30,534.94</div>
+                    <div class="report-kpi-change">+18.5% vs last month</div>
+                    <div class="report-kpi-label">Revenue</div>
+                  </div>
+                  <div class="report-kpi">
+                    <div class="report-kpi-value">4.33x</div>
+                    <div class="report-kpi-change down">-2.7% vs last month</div>
+                    <div class="report-kpi-label">ROAS</div>
+                  </div>
+                  <div class="report-kpi">
+                    <div class="report-kpi-value">270</div>
+                    <div class="report-kpi-change">+16.4% vs last month</div>
+                    <div class="report-kpi-label">Conversions</div>
+                  </div>
+                </div>
+              </div>
+              <div class="report-chart-grid">
+                <div class="report-chart-panel">
+                  <h4>ROAS Trend - Last 30 Days</h4>
+                  <img src="roas_chart.png" alt="">
+                </div>
+                <div class="report-chart-panel">
+                  <h4>Advertising Spend vs Attributed Revenue - Weekly</h4>
+                  <img src="spend_revenue_chart (1).png" alt="">
+                </div>
+              </div>
             </div>
-            <h3 class="font-semibold text-sm mb-2 text-zinc-100">Pulls Live Data</h3>
-            <p class="text-zinc-500 text-sm leading-relaxed">Grabs fresh performance data from Meta and Google Ads.</p>
           </div>
-
-          <div class="text-center reveal reveal-delay-3">
-            <div class="relative z-10 w-14 h-14 mx-auto bg-slate-800 border border-slate-700 rounded-2xl flex items-center justify-center text-[#2979FF] mb-5">
-              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-              <span class="absolute -top-2.5 -right-2.5 w-5 h-5 bg-[#2979FF] text-white rounded-full text-xs font-bold flex items-center justify-center leading-none">3</span>
-            </div>
-            <h3 class="font-semibold text-sm mb-2 text-zinc-100">AI Writes the Story</h3>
-            <p class="text-zinc-500 text-sm leading-relaxed">Generates warm, intelligent commentary and beautiful charts.</p>
-          </div>
-
-          <div class="text-center reveal reveal-delay-4">
-            <div class="relative z-10 w-14 h-14 mx-auto bg-slate-800 border border-slate-700 rounded-2xl flex items-center justify-center text-[#2979FF] mb-5">
-              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-              <span class="absolute -top-2.5 -right-2.5 w-5 h-5 bg-[#2979FF] text-white rounded-full text-xs font-bold flex items-center justify-center leading-none">4</span>
-            </div>
-            <h3 class="font-semibold text-sm mb-2 text-zinc-100">Delivers Value</h3>
-            <p class="text-zinc-500 text-sm leading-relaxed">Sends a branded report to your client the day before billing.</p>
-          </div>
-
+        </div>
+        <div class="hero-float chart-a" data-parallax data-speed="0.08">
+          <img src="roas_chart.png" alt="">
+        </div>
+        <div class="hero-float chart-b" data-parallax data-speed="0.12">
+          <img src="spend_revenue_chart (1).png" alt="">
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- What Clients Receive -->
-  <section id="example" class="py-20 bg-slate-900 border-t border-slate-800">
-    <div class="max-w-5xl mx-auto px-6">
-
-      <div class="text-center mb-14 reveal">
-        <p class="text-[#2979FF] font-semibold text-sm uppercase tracking-widest mb-3">The Report</p>
-        <h2 class="text-4xl font-bold mb-4">What your clients receive</h2>
-        <p class="text-zinc-400 max-w-xl mx-auto">Each report is designed to clearly show performance, explain results, and highlight what happens next.</p>
-      </div>
-
-      <!-- Feature cards: 3 top + 2 bottom centred -->
-      <div class="grid md:grid-cols-3 gap-5 mb-5">
-
-        <div class="bg-slate-800 border border-slate-700 rounded-3xl p-7 text-center reveal reveal-delay-1">
-          <div class="w-11 h-11 mx-auto bg-[#2979FF]/10 text-[#2979FF] rounded-2xl flex items-center justify-center mb-5">
-            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <div class="mx-auto w-full max-w-7xl px-5 lg:px-8">
+        <div class="max-w-3xl">
+          <div class="eyebrow mb-7" data-reveal>
+            <span class="pulse-dot" aria-hidden="true"></span>
+            Automated pre-invoice reports for digital agencies
           </div>
-          <h3 class="font-semibold text-base mb-2">Performance at a Glance</h3>
-          <p class="text-zinc-400 text-sm leading-relaxed">A clear KPI snapshot showing the top-level numbers that matter most — spend, revenue, ROAS, and conversions.</p>
-        </div>
 
-        <div class="bg-slate-800 border border-slate-700 rounded-3xl p-7 text-center reveal reveal-delay-2">
-          <div class="w-11 h-11 mx-auto bg-[#2979FF]/10 text-[#2979FF] rounded-2xl flex items-center justify-center mb-5">
-            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <h1 class="hero-title delay-90 mb-7" data-reveal>
+            Vividli <span>proves value before the bill.</span>
+          </h1>
+
+          <p class="hero-copy delay-180 mb-9" data-reveal>
+            Send polished AI-powered performance reports the day before billing, with live ad data, clear analysis, and next steps your clients can actually understand.
+          </p>
+
+          <div class="delay-270 flex flex-col gap-3 sm:flex-row" data-reveal>
+            <a href="https://calendly.com/loganmonahan57/30min" class="btn btn-primary px-6 py-4 text-base">
+              <i class="fa-solid fa-play"></i>
+              Watch 2-min Demo
+            </a>
+            <a href="https://calendly.com/loganmonahan57/30min" class="btn btn-secondary px-6 py-4 text-base">
+              <i class="fa-solid fa-rocket"></i>
+              Start 30-day Pilot
+            </a>
           </div>
-          <h3 class="font-semibold text-base mb-2">ROAS Trend + Spend vs Revenue</h3>
-          <p class="text-zinc-400 text-sm leading-relaxed">Simple charts that make performance movement and return easy to understand at a glance.</p>
-        </div>
 
-        <div class="bg-slate-800 border border-slate-700 rounded-3xl p-7 text-center reveal reveal-delay-3">
-          <div class="w-11 h-11 mx-auto bg-[#2979FF]/10 text-[#2979FF] rounded-2xl flex items-center justify-center mb-5">
-            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-          </div>
-          <h3 class="font-semibold text-base mb-2">Our Analysis</h3>
-          <p class="text-zinc-400 text-sm leading-relaxed">AI-generated commentary that explains results in plain English — not just numbers, but what they actually mean.</p>
-        </div>
-
-      </div>
-      <div class="grid md:grid-cols-2 gap-5 md:max-w-2xl md:mx-auto mb-14">
-
-        <div class="bg-slate-800 border border-slate-700 rounded-3xl p-7 text-center reveal reveal-delay-1">
-          <div class="w-11 h-11 mx-auto bg-[#2979FF]/10 text-[#2979FF] rounded-2xl flex items-center justify-center mb-5">
-            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          </div>
-          <h3 class="font-semibold text-base mb-2">Potential Opportunities</h3>
-          <p class="text-zinc-400 text-sm leading-relaxed">Clear next-step suggestions that show where performance can be improved and what to act on first.</p>
-        </div>
-
-        <div class="bg-slate-800 border border-slate-700 rounded-3xl p-7 text-center reveal reveal-delay-2">
-          <div class="w-11 h-11 mx-auto bg-[#2979FF]/10 text-[#2979FF] rounded-2xl flex items-center justify-center mb-5">
-            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-          </div>
-          <h3 class="font-semibold text-base mb-2">Campaign Breakdown</h3>
-          <p class="text-zinc-400 text-sm leading-relaxed">A campaign-level summary of spend, revenue, ROAS, and overall status — all in one clean table.</p>
-        </div>
-
-      </div>
-
-      <div class="text-center reveal">
-        <p class="text-zinc-500 text-sm mb-5">See the full report exactly as your client would receive it.</p>
-        <button onclick="openReportModal()" class="inline-flex items-center gap-2 bg-[#2979FF] hover:bg-[#1565C0] text-white px-7 py-3.5 rounded-2xl font-semibold transition">
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-          Preview Sample Report
-        </button>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Why Vividli -->
-  <section class="py-24 bg-slate-900 border-t border-slate-800">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="grid md:grid-cols-2 gap-16 items-start">
-
-        <div class="reveal">
-          <p class="text-[#2979FF] font-semibold text-sm uppercase tracking-widest mb-3">Why Vividli</p>
-          <h2 class="text-4xl font-bold mb-6 leading-tight">Your revenue protection system.</h2>
-          <p class="text-zinc-400 leading-relaxed max-w-sm">Agencies don't lose clients because of bad results — they lose them because clients don't understand the results. Vividli fixes that.</p>
-        </div>
-
-        <div class="divide-y divide-slate-800 reveal reveal-delay-2">
-
-          <div class="flex gap-5 pb-7">
-            <div class="flex-shrink-0 w-10 h-10 bg-[#2979FF]/10 text-[#2979FF] rounded-xl flex items-center justify-center">
-              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <div class="metric-strip delay-360 mt-10" data-reveal>
+            <div>
+              <span class="metric-value" data-count-to="24" data-suffix="h">0h</span>
+              <span class="metric-label">before billing</span>
             </div>
             <div>
-              <h3 class="font-semibold mb-1.5">Stop churn before it starts</h3>
-              <p class="text-zinc-400 text-sm leading-relaxed">Clients who understand their results don't cancel. Vividli makes sure they see the value every single month.</p>
-            </div>
-          </div>
-
-          <div class="flex gap-5 py-7">
-            <div class="flex-shrink-0 w-10 h-10 bg-[#2979FF]/10 text-[#2979FF] rounded-xl flex items-center justify-center">
-              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="8" cy="6" r="2"/><circle cx="16" cy="12" r="2"/><circle cx="10" cy="18" r="2"/></svg>
+              <span class="metric-value" data-count-to="15" data-suffix="min">0min</span>
+              <span class="metric-label">setup estimate</span>
             </div>
             <div>
-              <h3 class="font-semibold mb-1.5">No more manual reporting</h3>
-              <p class="text-zinc-400 text-sm leading-relaxed">Set up each client once. Vividli handles everything automatically — pulling data, writing commentary, and sending reports.</p>
+              <span class="metric-value" data-count-to="0" data-prefix="$" data-suffix="/client">$0/client</span>
+              <span class="metric-label">flat pricing</span>
             </div>
           </div>
-
-          <div class="flex gap-5 pt-7">
-            <div class="flex-shrink-0 w-10 h-10 bg-[#2979FF]/10 text-[#2979FF] rounded-xl flex items-center justify-center">
-              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
-            </div>
-            <div>
-              <h3 class="font-semibold mb-1.5">Looks like you wrote it</h3>
-              <p class="text-zinc-400 text-sm leading-relaxed">AI commentary that reads like a senior account manager, not a robot. Your clients will think you spent hours on it.</p>
-            </div>
-          </div>
-
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- Pricing -->
-  <section id="pricing" class="py-20 bg-slate-900 border-t border-slate-800">
-    <div class="max-w-5xl mx-auto px-6 text-center">
-      <h2 class="text-4xl font-semibold mb-4 reveal">Simple. Transparent. Unlimited.</h2>
-      <p class="text-zinc-400 mb-7 reveal reveal-delay-1">One flat fee. No per-client pricing. No surprises.</p>
-      <div class="flex justify-center mb-10 reveal reveal-delay-2">
-        <span class="inline-flex items-center gap-2.5 bg-slate-800/70 border border-slate-700/60 rounded-full px-5 py-2 text-xs text-zinc-400">
-          <span class="w-1.5 h-1.5 rounded-full bg-[#2979FF] flex-shrink-0"></span>
-          Founding users receive a free first month and locked-in pricing.
-        </span>
-      </div>
+      <a href="#how" class="next-peek">
+        <span>See how it moves</span>
+        <i class="fa-solid fa-arrow-down"></i>
+      </a>
+    </section>
 
-      <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-        <div class="bg-slate-800 border border-slate-700 rounded-3xl p-10 relative flex flex-col reveal reveal-delay-2">
-          <div class="absolute -top-4 right-8 bg-slate-700 border border-slate-600 text-zinc-300 text-xs font-semibold px-4 py-1 rounded-full tracking-wider">FOUNDING</div>
-          <h3 class="text-2xl font-semibold mb-2">Founder Pilot</h3>
-          <div class="flex items-baseline justify-center gap-2 mb-2">
-            <span class="text-6xl font-bold">$99</span>
-            <span class="text-zinc-400">/month</span>
+    <section id="how" class="section">
+      <div class="mx-auto max-w-7xl px-5 lg:px-8">
+        <div class="mb-12 grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+          <div data-reveal="left">
+            <p class="section-kicker mb-4">How it Works</p>
+            <h2 class="section-title">A reporting engine that runs while your team sleeps.</h2>
           </div>
-          <p class="text-zinc-500 text-xs mb-8">Founding pricing for early agencies</p>
-          <ul class="space-y-4 text-left mb-10">
-            <li class="flex items-start gap-3"><span class="text-[#2979FF] mt-1">✓</span> Unlimited clients</li>
-            <li class="flex items-start gap-3"><span class="text-[#2979FF] mt-1">✓</span> Meta + Google Ads reports</li>
-            <li class="flex items-start gap-3"><span class="text-[#2979FF] mt-1">✓</span> AI-powered commentary</li>
-            <li class="flex items-start gap-3"><span class="text-[#2979FF] mt-1">✓</span> Beautiful branded emails</li>
-            <li class="flex items-start gap-3"><span class="text-[#2979FF] mt-1">✓</span> 30-day risk-free pilot</li>
-          </ul>
-          <button onclick="window.location.href='https://calendly.com/loganmonahan57/30min'"
-                  class="w-full py-4 bg-[#2979FF] hover:bg-[#1565C0] rounded-2xl font-semibold transition mt-auto">
-            Start 30-Day Pilot
+          <p class="section-copy max-w-2xl lg:ml-auto" data-reveal="right">
+            Vividli watches invoice timing, pulls the newest campaign data, writes the narrative, and sends a branded report before the money conversation begins.
+          </p>
+        </div>
+
+        <div class="workflow stagger" data-observe-workflow>
+          <article class="glass-card step-card" data-tilt>
+            <div class="mb-8 flex items-center justify-between">
+              <span class="icon-box"><i class="fa-regular fa-calendar-days"></i></span>
+              <span class="step-number">1</span>
+            </div>
+            <h3 class="mb-3 text-xl font-bold text-white">Checks billing timing</h3>
+            <p class="text-sm leading-7 text-[var(--muted)]">Stripe invoice dates or fixed send schedules trigger the report at exactly the right moment.</p>
+          </article>
+
+          <article class="glass-card step-card" data-tilt>
+            <div class="mb-8 flex items-center justify-between">
+              <span class="icon-box"><i class="fa-solid fa-chart-line"></i></span>
+              <span class="step-number">2</span>
+            </div>
+            <h3 class="mb-3 text-xl font-bold text-white">Pulls live ad data</h3>
+            <p class="text-sm leading-7 text-[var(--muted)]">Meta and Google Ads metrics are refreshed so every report is grounded in the latest performance.</p>
+          </article>
+
+          <article class="glass-card step-card" data-tilt>
+            <div class="mb-8 flex items-center justify-between">
+              <span class="icon-box"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+              <span class="step-number">3</span>
+            </div>
+            <h3 class="mb-3 text-xl font-bold text-white">Writes the story</h3>
+            <p class="text-sm leading-7 text-[var(--muted)]">AI turns the numbers into clear account-manager commentary, including honest context when results dip.</p>
+          </article>
+
+          <article class="glass-card step-card" data-tilt>
+            <div class="mb-8 flex items-center justify-between">
+              <span class="icon-box"><i class="fa-regular fa-paper-plane"></i></span>
+              <span class="step-number">4</span>
+            </div>
+            <h3 class="mb-3 text-xl font-bold text-white">Delivers confidence</h3>
+            <p class="text-sm leading-7 text-[var(--muted)]">Clients receive a branded report before the invoice, giving them proof of value before cost is top of mind.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="example" class="section section-soft">
+      <div class="mx-auto max-w-7xl px-5 lg:px-8">
+        <div class="mb-12 grid gap-8 lg:grid-cols-[0.78fr_1.22fr] lg:items-end">
+          <div data-reveal="left">
+            <p class="section-kicker mb-4">The Report</p>
+            <h2 class="section-title">What your clients actually receive.</h2>
+          </div>
+          <div class="lg:ml-auto" data-reveal="right">
+            <p class="section-copy max-w-2xl">
+              A client-friendly email that balances executive summary, visual proof, and concrete recommendations. Use the tabs to jump through the report preview.
+            </p>
+            <button type="button" onclick="openReportModal()" class="btn btn-secondary mt-6 px-5 py-3 text-sm">
+              <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
+              Open Full Sample
+            </button>
+          </div>
+        </div>
+
+        <div class="preview-shell">
+          <div class="space-y-3" data-reveal="left">
+            <button class="tab-button active" type="button" data-report-tab data-shift="0">
+              <strong><i class="fa-solid fa-gauge-high mr-2 text-[var(--brand-2)]"></i>Performance Snapshot</strong>
+              <span>Spend, revenue, ROAS, and conversions in one clean opening view.</span>
+            </button>
+            <button class="tab-button" type="button" data-report-tab data-shift="-33%">
+              <strong><i class="fa-solid fa-chart-simple mr-2 text-[var(--mint)]"></i>Charts + Analysis</strong>
+              <span>Visual trends paired with plain-English interpretation of what changed.</span>
+            </button>
+            <button class="tab-button" type="button" data-report-tab data-shift="-60%">
+              <strong><i class="fa-solid fa-list-check mr-2 text-[var(--sun)]"></i>Opportunities</strong>
+              <span>Prioritized recommendations and campaign-level detail clients can act on.</span>
+            </button>
+
+            <div class="chart-grid pt-4">
+              <article class="mini-chart" data-tilt>
+                <h3>ROAS Trend</h3>
+                <img src="roas_chart.png" alt="ROAS trend chart">
+              </article>
+              <article class="mini-chart" data-tilt>
+                <h3>Spend vs Revenue</h3>
+                <img src="spend_revenue_chart (1).png" alt="Spend versus attributed revenue chart">
+              </article>
+            </div>
+          </div>
+
+          <div class="report-browser" data-reveal="right">
+            <div class="browser-bar" aria-hidden="true">
+              <span class="browser-dot"></span>
+              <span class="browser-dot"></span>
+              <span class="browser-dot"></span>
+            </div>
+            <div class="report-window" id="report-window">
+              <div class="report-document">
+                <div class="report-document-header">
+                  <div class="report-document-topline">
+                    <img src="logo.png" alt="Vividli" class="report-document-logo">
+                    <div class="report-document-date">
+                      <div>21 Mar - 19 Apr 2026</div>
+                      <div>Monthly Performance Report</div>
+                    </div>
+                  </div>
+                  <h2 class="report-document-title">Your results are in,<br><span>Acme Digital.</span></h2>
+                </div>
+
+                <div class="report-invoice">Invoice due tomorrow: AUD $99.00. Questions? Just reply to this email.</div>
+
+                <div class="report-document-body">
+                  <p class="report-copy">Hi Logan,</p>
+                  <p class="report-copy">Here's a complete picture of what your advertising delivered this month: every dollar tracked, every result explained.</p>
+
+                  <section>
+                    <h3 class="report-section-label mb-4">Performance at a Glance</h3>
+                    <div class="report-kpi-grid">
+                      <div class="report-kpi">
+                        <div class="report-kpi-value">$7,051.95</div>
+                        <div class="report-kpi-change">+12.3% vs last month</div>
+                        <div class="report-kpi-label">Ad Spend</div>
+                      </div>
+                      <div class="report-kpi">
+                        <div class="report-kpi-value">$30,534.94</div>
+                        <div class="report-kpi-change">+18.5% vs last month</div>
+                        <div class="report-kpi-label">Revenue</div>
+                      </div>
+                      <div class="report-kpi">
+                        <div class="report-kpi-value">4.33x</div>
+                        <div class="report-kpi-change down">-2.7% vs last month</div>
+                        <div class="report-kpi-label">ROAS</div>
+                      </div>
+                      <div class="report-kpi">
+                        <div class="report-kpi-value">270</div>
+                        <div class="report-kpi-change">+16.4% vs last month</div>
+                        <div class="report-kpi-label">Conversions</div>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section class="report-chart-grid">
+                    <div class="report-chart-panel">
+                      <h4>ROAS Trend - Last 30 Days</h4>
+                      <img src="roas_chart.png" alt="ROAS trend chart">
+                    </div>
+                    <div class="report-chart-panel">
+                      <h4>Advertising Spend vs Attributed Revenue - Weekly</h4>
+                      <img src="spend_revenue_chart (1).png" alt="Spend versus attributed revenue chart">
+                    </div>
+                  </section>
+
+                  <section>
+                    <h3 class="report-section-label mb-4">Our Analysis</h3>
+                    <div class="report-analysis">
+                      <p>Strong month. You grew revenue to $12.4k while actually spending less, and that pushed your blended ROAS up to 4.1x. More conversions, better efficiency, lower spend. That is the combination you want to see.</p>
+                      <p class="mt-4">Retargeting - 30d did the heavy lifting. It returned $4.6k on $1.2k in spend, landing right at the account average and carrying a disproportionate share of the month's results.</p>
+                      <p class="mt-4">Prospecting - Broad and Lookalike - Top 1% both came in below the account average, at 2.8x and 2.6x respectively. These campaigns are the engine that feeds retargeting over time, so they are worth a close look rather than a quick fix.</p>
+                    </div>
+                  </section>
+
+                  <section>
+                    <h3 class="report-section-label mb-4">Potential Opportunities</h3>
+                    <div class="report-opportunity-list">
+                      <div class="report-opportunity">
+                        <span>1</span>
+                        <p>Based on this month's numbers, it may be worth tightening the audience on Prospecting - Broad. At 2.8x ROAS it is spending efficiently but trailing the account average.</p>
+                      </div>
+                      <div class="report-opportunity">
+                        <span>2</span>
+                        <p>The data points toward a budget rebalance worth considering. Retargeting - 30d is your strongest performer at 4.2x and only received $1.2k in spend.</p>
+                      </div>
+                      <div class="report-opportunity">
+                        <span>3</span>
+                        <p>A strong opportunity here could be reviewing the creative and offer on Lookalike - Top 1%. Lookalike audiences usually respond well to creative that mirrors what converted existing customers.</p>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section>
+                    <h3 class="report-section-label mb-4">Campaign Breakdown</h3>
+                    <div class="report-table-wrap">
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>Campaign</th>
+                            <th>Spend</th>
+                            <th>Revenue</th>
+                            <th>ROAS</th>
+                            <th>Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr><td><strong>Prospecting - Broad</strong></td><td>$1,064.17</td><td>$2,989.61</td><td>2.8x</td><td><strong>Strong</strong></td></tr>
+                          <tr><td><strong>Retargeting - 30d</strong></td><td>$1,216.20</td><td>$4,550.01</td><td>4.17x</td><td><strong>Strong</strong></td></tr>
+                          <tr><td><strong>Lookalike - Top 1%</strong></td><td>$760.12</td><td>$1,549.05</td><td>2.61x</td><td><strong>Strong</strong></td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </section>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="impact" class="section">
+      <div class="mx-auto max-w-7xl px-5 lg:px-8">
+        <div class="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+          <div data-reveal="left">
+            <p class="section-kicker mb-4">Why Vividli</p>
+            <h2 class="section-title mb-6">Your revenue protection system.</h2>
+            <p class="section-copy max-w-xl">
+              Agencies do not only lose clients because of bad results. They lose clients when the value is invisible, late, or hard to explain.
+            </p>
+          </div>
+
+          <div class="grid gap-4" data-reveal="right">
+            <article class="glass-card p-6" data-tilt>
+              <div class="flex gap-5">
+                <span class="icon-box shrink-0"><i class="fa-solid fa-shield-heart"></i></span>
+                <div>
+                  <h3 class="mb-2 text-xl font-bold text-white">Stop churn before it starts</h3>
+                  <p class="text-sm leading-7 text-[var(--muted)]">Clients who understand their results are less likely to cancel. Vividli keeps value visible every month.</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="glass-card p-6" data-tilt>
+              <div class="flex gap-5">
+                <span class="icon-box shrink-0"><i class="fa-solid fa-sliders"></i></span>
+                <div>
+                  <h3 class="mb-2 text-xl font-bold text-white">Replace manual reporting drag</h3>
+                  <p class="text-sm leading-7 text-[var(--muted)]">Set up each client once. The data pull, commentary, charts, and send timing happen automatically.</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="glass-card p-6" data-tilt>
+              <div class="flex gap-5">
+                <span class="icon-box shrink-0"><i class="fa-solid fa-star"></i></span>
+                <div>
+                  <h3 class="mb-2 text-xl font-bold text-white">Sound like a senior account lead</h3>
+                  <p class="text-sm leading-7 text-[var(--muted)]">The commentary explains wins, dips, and next moves with the tone of someone who knows the account.</p>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="impact-grid mt-12">
+          <article class="glass-card impact-stat" data-reveal data-tilt>
+            <p class="mb-4 text-sm font-bold uppercase text-[var(--brand-2)]">Proof before payment</p>
+            <span class="impact-number" data-count-to="100" data-suffix="%">0%</span>
+            <p class="mt-3 text-sm leading-7 text-[var(--muted)]">Reports are scheduled before the invoice lands, not after clients already have billing questions.</p>
+          </article>
+
+          <article class="glass-card impact-stat delay-90" data-reveal data-tilt>
+            <p class="mb-4 text-sm font-bold uppercase text-[var(--mint)]">Unlimited client scale</p>
+            <span class="impact-number" data-count-to="1" data-suffix=" flat fee">0 flat fee</span>
+            <p class="mt-3 text-sm leading-7 text-[var(--muted)]">Pricing is simple, so reporting more accounts does not punish growth.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="pricing" class="section section-soft">
+      <div class="mx-auto max-w-6xl px-5 lg:px-8">
+        <div class="mx-auto mb-12 max-w-3xl text-center" data-reveal>
+          <p class="section-kicker mb-4 justify-center">Pricing</p>
+          <h2 class="section-title mb-5">Simple, transparent, and built for agencies.</h2>
+          <p class="section-copy">One flat fee. No per-client pricing. Founding users receive a free first month and locked-in pricing.</p>
+        </div>
+
+        <div class="pricing-grid">
+          <article class="glass-card price-card" data-reveal="left" data-tilt>
+            <div class="mb-7 flex items-center justify-between gap-4">
+              <h3 class="text-2xl font-bold text-white">Founder Pilot</h3>
+              <span class="badge"><i class="fa-solid fa-seedling text-[var(--mint)]"></i>Founding</span>
+            </div>
+            <div class="mb-2 flex items-end gap-2">
+              <span class="text-6xl font-black leading-none text-white">$99</span>
+              <span class="pb-2 text-[var(--muted)]">/month</span>
+            </div>
+            <p class="mb-8 text-sm text-[var(--dim)]">Founding pricing for early agencies.</p>
+            <ul class="mb-10 grid gap-4 text-sm text-[#dce2eb]">
+              <li class="flex gap-3"><i class="fa-solid fa-check mt-1 text-[var(--mint)]"></i>Unlimited clients</li>
+              <li class="flex gap-3"><i class="fa-solid fa-check mt-1 text-[var(--mint)]"></i>Meta + Google Ads reports</li>
+              <li class="flex gap-3"><i class="fa-solid fa-check mt-1 text-[var(--mint)]"></i>AI-powered commentary</li>
+              <li class="flex gap-3"><i class="fa-solid fa-check mt-1 text-[var(--mint)]"></i>Beautiful branded emails</li>
+              <li class="flex gap-3"><i class="fa-solid fa-check mt-1 text-[var(--mint)]"></i>30-day risk-free pilot</li>
+            </ul>
+            <a href="https://calendly.com/loganmonahan57/30min" class="btn btn-secondary w-full px-5 py-4">
+              <i class="fa-solid fa-arrow-right"></i>
+              Start 30-Day Pilot
+            </a>
+          </article>
+
+          <article class="glass-card price-card featured" data-reveal="right" data-tilt>
+            <div class="mb-7 flex items-center justify-between gap-4">
+              <h3 class="text-2xl font-bold text-white">Pro Plan</h3>
+              <span class="badge"><i class="fa-solid fa-bolt text-[var(--sun)]"></i>Recommended</span>
+            </div>
+            <div class="mb-10 flex items-end gap-2">
+              <span class="text-6xl font-black leading-none text-white">$299</span>
+              <span class="pb-2 text-[var(--muted)]">/month</span>
+            </div>
+            <ul class="mb-10 grid gap-4 text-sm text-[#dce2eb]">
+              <li class="flex gap-3"><i class="fa-solid fa-check mt-1 text-[var(--mint)]"></i>Everything in Founder</li>
+              <li class="flex gap-3"><i class="fa-solid fa-check mt-1 text-[var(--mint)]"></i>White-label reports</li>
+              <li class="flex gap-3"><i class="fa-solid fa-check mt-1 text-[var(--mint)]"></i>SMS delivery option</li>
+              <li class="flex gap-3"><i class="fa-solid fa-check mt-1 text-[var(--mint)]"></i>Custom AI prompts</li>
+              <li class="flex gap-3"><i class="fa-solid fa-check mt-1 text-[var(--mint)]"></i>Priority support</li>
+            </ul>
+            <a href="https://calendly.com/loganmonahan57/30min" class="btn btn-primary w-full px-5 py-4">
+              <i class="fa-solid fa-calendar-check"></i>
+              Get Pro Plan
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="section">
+      <div class="mx-auto max-w-4xl px-5 lg:px-8">
+        <div class="mb-10 text-center" data-reveal>
+          <p class="section-kicker mb-4 justify-center">FAQ</p>
+          <h2 class="section-title">Common questions</h2>
+        </div>
+
+        <div class="grid gap-3 stagger">
+          <details>
+            <summary class="flex items-center justify-between gap-5 px-5 py-5 font-bold text-white">
+              Which ad platforms do you support, and how does Vividli connect?
+              <i class="fa-solid fa-chevron-down chevron"></i>
+            </summary>
+            <div class="faq-answer">
+              <div class="px-5 pb-5 text-sm leading-7 text-[var(--muted)]">
+                Currently Meta Ads and Google Ads, which cover the majority of what most agencies run for their clients. TikTok Ads is coming soon. You connect accounts once during onboarding via secure OAuth. Vividli reads performance data only and never makes changes to your campaigns or spend.
+              </div>
+            </div>
+          </details>
+
+          <details>
+            <summary class="flex items-center justify-between gap-5 px-5 py-5 font-bold text-white">
+              How does Vividli know when to send the report?
+              <i class="fa-solid fa-chevron-down chevron"></i>
+            </summary>
+            <div class="faq-answer">
+              <div class="px-5 pb-5 text-sm leading-7 text-[var(--muted)]">
+                Vividli connects to your Stripe account and checks every morning for invoices due the following day. When one is detected, the report goes out automatically at 8am AEST. For clients not on Stripe, you can set a fixed monthly send date instead.
+              </div>
+            </div>
+          </details>
+
+          <details>
+            <summary class="flex items-center justify-between gap-5 px-5 py-5 font-bold text-white">
+              How long does setup take?
+              <i class="fa-solid fa-chevron-down chevron"></i>
+            </summary>
+            <div class="faq-answer">
+              <div class="px-5 pb-5 text-sm leading-7 text-[var(--muted)]">
+                Getting started takes about 15 minutes. You tell us your client details, connect their ad accounts, and Vividli handles everything from there. No technical knowledge required.
+              </div>
+            </div>
+          </details>
+
+          <details>
+            <summary class="flex items-center justify-between gap-5 px-5 py-5 font-bold text-white">
+              Is the AI commentary actually good, even when results are down?
+              <i class="fa-solid fa-chevron-down chevron"></i>
+            </summary>
+            <div class="faq-answer">
+              <div class="px-5 pb-5 text-sm leading-7 text-[var(--muted)]">
+                The commentary is designed to read like a senior account manager: specific to each client's actual numbers, written plainly, and honest about poor results while still framing a path forward.
+              </div>
+            </div>
+          </details>
+
+          <details>
+            <summary class="flex items-center justify-between gap-5 px-5 py-5 font-bold text-white">
+              Do my clients know it's automated?
+              <i class="fa-solid fa-chevron-down chevron"></i>
+            </summary>
+            <div class="faq-answer">
+              <div class="px-5 pb-5 text-sm leading-7 text-[var(--muted)]">
+                That's up to you. The report arrives from your agency's email domain and carries your branding. Most agencies present it as part of their standard reporting process.
+              </div>
+            </div>
+          </details>
+
+          <details>
+            <summary class="flex items-center justify-between gap-5 px-5 py-5 font-bold text-white">
+              Is my data secure and is there a lock-in contract?
+              <i class="fa-solid fa-chevron-down chevron"></i>
+            </summary>
+            <div class="faq-answer">
+              <div class="px-5 pb-5 text-sm leading-7 text-[var(--muted)]">
+                All data is encrypted in transit and at rest. Vividli only reads aggregate ad performance metrics, never personal customer data. There is no lock-in contract: monthly subscription, cancel any time.
+              </div>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="footer-cta py-16">
+      <div class="mx-auto flex max-w-7xl flex-col gap-8 px-5 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+        <div data-reveal="left">
+          <p class="section-kicker mb-4">Ready</p>
+          <h2 class="max-w-2xl text-3xl font-black leading-tight text-white sm:text-4xl">Show the value before your next invoice lands.</h2>
+        </div>
+        <div class="flex flex-col gap-3 sm:flex-row" data-reveal="right">
+          <button type="button" onclick="openReportModal()" class="btn btn-secondary px-6 py-4">
+            <i class="fa-regular fa-eye"></i>
+            Preview Sample
           </button>
-        </div>
-
-        <div class="pro-glow bg-gradient-to-br from-slate-800 to-slate-900 border border-[#2979FF]/40 rounded-3xl p-10 relative flex flex-col reveal reveal-delay-3">
-          <div class="absolute -top-4 right-8 bg-[#2979FF] text-white text-xs font-bold px-4 py-1 rounded-full">RECOMMENDED</div>
-          <h3 class="text-2xl font-semibold mb-2">Pro Plan</h3>
-          <div class="flex items-baseline justify-center gap-2 mb-8">
-            <span class="text-6xl font-bold">$299</span>
-            <span class="text-zinc-400">/month</span>
-          </div>
-          <ul class="space-y-4 text-left mb-10">
-            <li class="flex items-start gap-3"><span class="text-[#2979FF] mt-1">✓</span> Everything in Founder</li>
-            <li class="flex items-start gap-3"><span class="text-[#2979FF] mt-1">✓</span> White-label reports</li>
-            <li class="flex items-start gap-3"><span class="text-[#2979FF] mt-1">✓</span> SMS delivery option</li>
-            <li class="flex items-start gap-3"><span class="text-[#2979FF] mt-1">✓</span> Custom AI prompts</li>
-            <li class="flex items-start gap-3"><span class="text-[#2979FF] mt-1">✓</span> Priority support</li>
-          </ul>
-          <button onclick="window.location.href='https://calendly.com/loganmonahan57/30min'"
-                  class="w-full py-4 bg-white text-zinc-900 hover:bg-zinc-100 rounded-2xl font-semibold transition mt-auto">
-            Get Pro Plan
-          </button>
+          <a href="https://calendly.com/loganmonahan57/30min" class="btn btn-primary px-6 py-4">
+            <i class="fa-regular fa-calendar"></i>
+            Book Demo
+          </a>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </main>
 
-  <!-- FAQ -->
-  <section id="faq" class="py-20 bg-slate-900 border-t border-slate-800">
-    <div class="max-w-3xl mx-auto px-6">
-      <div class="mb-14 text-center reveal">
-        <p class="text-[#2979FF] font-semibold text-sm uppercase tracking-widest mb-3">FAQ</p>
-        <h2 class="text-4xl font-bold">Common questions</h2>
-      </div>
-
-      <div class="space-y-3">
-
-        <details class="bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden reveal reveal-delay-1">
-          <summary class="flex items-center justify-between px-6 py-5 font-medium text-zinc-200">
-            Which ad platforms do you support, and how does Vividli connect?
-            <svg class="chevron w-5 h-5 text-[#2979FF] flex-shrink-0 ml-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </summary>
-          <div class="px-6 pb-5 text-zinc-400 text-sm leading-relaxed">
-            Currently Meta Ads and Google Ads, which cover the majority of what most agencies run for their clients. TikTok Ads is coming soon. You connect accounts once during onboarding via secure OAuth — Vividli reads performance data only and never makes changes to your campaigns or spend.
-          </div>
-        </details>
-
-        <details class="bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden reveal reveal-delay-2">
-          <summary class="flex items-center justify-between px-6 py-5 font-medium text-zinc-200">
-            How does Vividli know when to send the report?
-            <svg class="chevron w-5 h-5 text-[#2979FF] flex-shrink-0 ml-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </summary>
-          <div class="px-6 pb-5 text-zinc-400 text-sm leading-relaxed">
-            Vividli connects to your Stripe account and checks every morning for invoices due the following day. When one is detected, the report goes out automatically at 8am AEST. For clients not on Stripe, you can set a fixed monthly send date instead — Vividli will deliver on schedule regardless.
-          </div>
-        </details>
-
-        <details class="bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden reveal reveal-delay-3">
-          <summary class="flex items-center justify-between px-6 py-5 font-medium text-zinc-200">
-            How long does setup take?
-            <svg class="chevron w-5 h-5 text-[#2979FF] flex-shrink-0 ml-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </summary>
-          <div class="px-6 pb-5 text-zinc-400 text-sm leading-relaxed">
-            Getting started takes about 15 minutes. You tell us your client details, connect their ad accounts, and Vividli handles everything from there. No technical knowledge required.
-          </div>
-        </details>
-
-        <details class="bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden reveal reveal-delay-1">
-          <summary class="flex items-center justify-between px-6 py-5 font-medium text-zinc-200">
-            Is the AI commentary actually good — even when results are down?
-            <svg class="chevron w-5 h-5 text-[#2979FF] flex-shrink-0 ml-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </summary>
-          <div class="px-6 pb-5 text-zinc-400 text-sm leading-relaxed">
-            We spent a lot of time on this. The commentary reads like a senior account manager — specific to each client's actual numbers, written in plain English, and no generic filler. That includes bad months. Rather than going quiet, Vividli contextualises underperformance honestly and always frames a path forward. A transparent report builds more trust than silence.
-          </div>
-        </details>
-
-        <details class="bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden reveal reveal-delay-2">
-          <summary class="flex items-center justify-between px-6 py-5 font-medium text-zinc-200">
-            Do my clients know it's automated?
-            <svg class="chevron w-5 h-5 text-[#2979FF] flex-shrink-0 ml-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </summary>
-          <div class="px-6 pb-5 text-zinc-400 text-sm leading-relaxed">
-            That's up to you. The report arrives from your agency's email domain and carries your branding. Most agencies present it as part of their standard reporting process.
-          </div>
-        </details>
-
-        <details class="bg-slate-800 border border-slate-700 rounded-2xl overflow-hidden reveal reveal-delay-1">
-          <summary class="flex items-center justify-between px-6 py-5 font-medium text-zinc-200">
-            Is my data secure and is there a lock-in contract?
-            <svg class="chevron w-5 h-5 text-[#2979FF] flex-shrink-0 ml-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </summary>
-          <div class="px-6 pb-5 text-zinc-400 text-sm leading-relaxed">
-            All data is encrypted in transit and at rest — Vividli only reads aggregate ad performance metrics, never personal customer data. And no, there's no lock-in. Monthly subscription, cancel any time.
-          </div>
-        </details>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="bg-slate-950 border-t border-slate-800 py-12 text-zinc-500 text-sm text-center">
-    <p>© 2026 Vividli • Helping digital agencies prove value before the bill.</p>
+  <footer class="border-t border-white/10 bg-[#07080d] py-10 text-center text-sm text-[var(--dim)]">
+    <p>&copy; 2026 Vividli. Helping digital agencies prove value before the bill.</p>
   </footer>
 
-  <!-- Report Modal -->
-  <div id="report-modal-overlay" class="modal-overlay" role="dialog" aria-modal="true" aria-label="Sample report" onclick="if(event.target===this)closeReportModal()">
+  <div id="report-modal-overlay" class="modal-overlay" role="dialog" aria-modal="true" aria-label="Sample report" onclick="if(event.target===this) closeReportModal()">
     <div class="modal-inner" id="report-modal-inner">
       <div class="modal-close">
-        <button id="modal-close-btn" onclick="closeReportModal()" aria-label="Close report">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        <button id="modal-close-btn" type="button" onclick="closeReportModal()" aria-label="Close report">
+          <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
+
       <div class="email-float">
-        <!-- Header -->
-        <div class="bg-[#0f172a] text-white px-8 py-8">
-          <div class="flex justify-between items-start">
+        <div class="bg-[#10141f] px-8 py-8 text-white">
+          <div class="flex items-start justify-between gap-6">
             <img src="logo.png" alt="Vividli" class="h-8 w-auto brightness-0 invert">
             <div class="text-right text-sm">
-              <div>21 Mar – 19 Apr 2026</div>
-              <div class="opacity-75">Monthly Performance Report</div>
+              <div>21 Mar - 19 Apr 2026</div>
+              <div class="text-white/65">Monthly Performance Report</div>
             </div>
           </div>
-          <h1 class="text-3xl font-semibold mt-6">Your results are in,<br>Acme Digital.</h1>
+          <h1 class="mt-7 text-3xl font-bold leading-tight">Your results are in,<br>Acme Digital.</h1>
         </div>
-        <!-- Invoice Reminder -->
-        <div class="bg-yellow-400 text-yellow-950 px-8 py-3 text-sm font-medium border-b">
-          Invoice due tomorrow: AUD $99.00 — Questions? Just reply to this email.
+
+        <div class="border-b bg-[#f6c453] px-8 py-3 text-sm font-bold text-[#312304]">
+          Invoice due tomorrow: AUD $99.00. Questions? Just reply to this email.
         </div>
-        <!-- Body -->
-        <div class="bg-white p-8 space-y-10 text-zinc-800 leading-relaxed">
+
+        <div class="space-y-10 bg-white p-8 leading-relaxed text-zinc-800">
           <p>Hi Logan,</p>
-          <p>Here's a complete picture of what your advertising delivered this month — every dollar tracked, every result explained.</p>
+          <p>Here's a complete picture of what your advertising delivered this month: every dollar tracked, every result explained.</p>
+
           <div>
-            <h3 class="uppercase text-xs tracking-widest text-zinc-500 mb-4">Performance at a Glance</h3>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div class="bg-zinc-100 p-5 rounded-2xl text-center"><div class="text-2xl font-semibold">$7,051.95</div><div class="text-xs text-emerald-600">+12.3% vs last month</div><div class="text-xs text-zinc-500">AD SPEND</div></div>
-              <div class="bg-zinc-100 p-5 rounded-2xl text-center"><div class="text-2xl font-semibold">$30,534.94</div><div class="text-xs text-emerald-600">+18.5% vs last month</div><div class="text-xs text-zinc-500">REVENUE</div></div>
-              <div class="bg-zinc-100 p-5 rounded-2xl text-center"><div class="text-2xl font-semibold">4.33x</div><div class="text-xs text-amber-600">-2.7% vs last month</div><div class="text-xs text-zinc-500">ROAS</div></div>
-              <div class="bg-zinc-100 p-5 rounded-2xl text-center"><div class="text-2xl font-semibold">270</div><div class="text-xs text-emerald-600">+16.4% vs last month</div><div class="text-xs text-zinc-500">CONVERSIONS</div></div>
+            <h3 class="mb-4 text-xs font-bold uppercase tracking-widest text-zinc-500">Performance at a Glance</h3>
+            <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+              <div class="rounded-[8px] bg-zinc-100 p-5 text-center"><div class="text-2xl font-bold">$7,051.95</div><div class="text-xs text-emerald-600">+12.3% vs last month</div><div class="text-xs text-zinc-500">AD SPEND</div></div>
+              <div class="rounded-[8px] bg-zinc-100 p-5 text-center"><div class="text-2xl font-bold">$30,534.94</div><div class="text-xs text-emerald-600">+18.5% vs last month</div><div class="text-xs text-zinc-500">REVENUE</div></div>
+              <div class="rounded-[8px] bg-zinc-100 p-5 text-center"><div class="text-2xl font-bold">4.33x</div><div class="text-xs text-amber-600">-2.7% vs last month</div><div class="text-xs text-zinc-500">ROAS</div></div>
+              <div class="rounded-[8px] bg-zinc-100 p-5 text-center"><div class="text-2xl font-bold">270</div><div class="text-xs text-emerald-600">+16.4% vs last month</div><div class="text-xs text-zinc-500">CONVERSIONS</div></div>
             </div>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-zinc-100 p-6 rounded-2xl"><p class="font-medium mb-4">ROAS Trend – Last 30 Days</p><img src="roas_chart.png" alt="ROAS Trend Chart" class="w-full rounded-xl"></div>
-            <div class="bg-zinc-100 p-6 rounded-2xl"><p class="font-medium mb-4">Advertising Spend vs Attributed Revenue – Weekly</p><img src="spend_revenue_chart (1).png" alt="Spend vs Revenue Chart" class="w-full rounded-xl"></div>
+
+          <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <div class="rounded-[8px] bg-zinc-100 p-6"><p class="mb-4 font-bold">ROAS Trend - Last 30 Days</p><img src="roas_chart.png" alt="ROAS Trend Chart" class="rounded-[8px]"></div>
+            <div class="rounded-[8px] bg-zinc-100 p-6"><p class="mb-4 font-bold">Advertising Spend vs Attributed Revenue - Weekly</p><img src="spend_revenue_chart (1).png" alt="Spend vs Revenue Chart" class="rounded-[8px]"></div>
           </div>
+
           <div>
-            <h3 class="uppercase text-xs tracking-widest text-zinc-500 mb-4">Our Analysis</h3>
-            <div class="border-l-4 border-[#2979FF] bg-zinc-50 rounded-r-xl p-6 space-y-4 text-zinc-700 text-sm leading-relaxed">
-              <p>Strong month. You grew revenue to $12.4k while actually spending less — and that pushed your blended ROAS up to 4.1x. More conversions, better efficiency, lower spend. That is the combination you want to see.</p>
-              <p>Retargeting — 30d did the heavy lifting. It returned $4.6k on $1.2k in spend, landing right at the account average and carrying a disproportionate share of the month's results. That tells you your warm audiences are engaged and converting well. When retargeting is this healthy, it usually means your top-of-funnel work over the past few months is paying off downstream.</p>
-              <p>Prospecting — Broad and Lookalike — Top 1% both came in below the account average, at 2.8x and 2.6x respectively. Neither result is alarming on its own, but together they suggest your cold audience targeting may be working a little harder than it needs to. These campaigns are the engine that feeds retargeting over time, so they are worth a close look rather than a quick fix.</p>
-              <p>All up, 47 conversions on $3k of spend is a solid outcome. The fact that your cost per conversion came down while volume went up is exactly the kind of momentum worth building on.</p>
+            <h3 class="mb-4 text-xs font-bold uppercase tracking-widest text-zinc-500">Our Analysis</h3>
+            <div class="space-y-4 rounded-r-[8px] border-l-4 border-[#2979FF] bg-zinc-50 p-6 text-sm leading-7 text-zinc-700">
+              <p>Strong month. You grew revenue to $12.4k while actually spending less, and that pushed your blended ROAS up to 4.1x. More conversions, better efficiency, lower spend. That is the combination you want to see.</p>
+              <p>Retargeting - 30d did the heavy lifting. It returned $4.6k on $1.2k in spend, landing right at the account average and carrying a disproportionate share of the month's results.</p>
+              <p>Prospecting - Broad and Lookalike - Top 1% both came in below the account average, at 2.8x and 2.6x respectively. These campaigns are the engine that feeds retargeting over time, so they are worth a close look rather than a quick fix.</p>
             </div>
           </div>
+
           <div>
-            <h3 class="uppercase text-xs tracking-widest text-zinc-500 mb-4">Potential Opportunities</h3>
+            <h3 class="mb-4 text-xs font-bold uppercase tracking-widest text-zinc-500">Potential Opportunities</h3>
             <div class="space-y-3">
-              <div class="flex gap-4 bg-zinc-50 rounded-xl p-5 text-sm text-zinc-700 leading-relaxed"><span class="flex-shrink-0 w-7 h-7 rounded-full bg-[#2979FF] text-white text-xs font-bold flex items-center justify-center">1</span><p>Based on this month's numbers, it may be worth tightening the audience on Prospecting — Broad. At 2.8x ROAS it is spending efficiently but trailing the account average, which typically points to targeting that is a touch too wide. Narrowing by interest or demographic could lift that return meaningfully.</p></div>
-              <div class="flex gap-4 bg-zinc-50 rounded-xl p-5 text-sm text-zinc-700 leading-relaxed"><span class="flex-shrink-0 w-7 h-7 rounded-full bg-[#2979FF] text-white text-xs font-bold flex items-center justify-center">2</span><p>The data points toward a budget rebalance worth considering. Retargeting — 30d is your strongest performer at 4.2x and only received $1.2k in spend. Shifting a portion of budget from the two underperforming campaigns toward retargeting could lift your overall blended ROAS in the near term.</p></div>
-              <div class="flex gap-4 bg-zinc-50 rounded-xl p-5 text-sm text-zinc-700 leading-relaxed"><span class="flex-shrink-0 w-7 h-7 rounded-full bg-[#2979FF] text-white text-xs font-bold flex items-center justify-center">3</span><p>A strong opportunity here could be reviewing the creative and offer on Lookalike — Top 1%. At 2.6x it is your lowest ROAS campaign, and lookalike audiences at this quality tier usually respond well to creative that mirrors what converted your existing customers — worth testing against what is currently running.</p></div>
+              <div class="flex gap-4 rounded-[8px] bg-zinc-50 p-5 text-sm leading-7 text-zinc-700"><span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#2979FF] text-xs font-bold text-white">1</span><p>Based on this month's numbers, it may be worth tightening the audience on Prospecting - Broad. At 2.8x ROAS it is spending efficiently but trailing the account average.</p></div>
+              <div class="flex gap-4 rounded-[8px] bg-zinc-50 p-5 text-sm leading-7 text-zinc-700"><span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#2979FF] text-xs font-bold text-white">2</span><p>The data points toward a budget rebalance worth considering. Retargeting - 30d is your strongest performer at 4.2x and only received $1.2k in spend.</p></div>
+              <div class="flex gap-4 rounded-[8px] bg-zinc-50 p-5 text-sm leading-7 text-zinc-700"><span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#2979FF] text-xs font-bold text-white">3</span><p>A strong opportunity here could be reviewing the creative and offer on Lookalike - Top 1%. Lookalike audiences usually respond well to creative that mirrors what converted existing customers.</p></div>
             </div>
           </div>
+
           <div>
-            <h3 class="uppercase text-xs tracking-widest text-zinc-500 mb-4">Campaign Breakdown</h3>
-            <div class="bg-zinc-50 rounded-xl border border-zinc-200 overflow-hidden text-xs">
+            <h3 class="mb-4 text-xs font-bold uppercase tracking-widest text-zinc-500">Campaign Breakdown</h3>
+            <div class="overflow-hidden rounded-[8px] border border-zinc-200 bg-zinc-50 text-xs">
               <table class="w-full">
-                <thead><tr class="bg-white text-zinc-500 text-xs uppercase tracking-wider border-b border-zinc-200"><th class="text-left px-4 py-2 font-medium">Campaign</th><th class="text-left px-4 py-2 font-medium">Spend</th><th class="text-left px-4 py-2 font-medium">Revenue</th><th class="text-left px-4 py-2 font-medium">ROAS</th><th class="text-left px-4 py-2 font-medium">Status</th></tr></thead>
+                <thead>
+                  <tr class="border-b border-zinc-200 bg-white text-left uppercase tracking-wider text-zinc-500">
+                    <th class="px-4 py-2 font-bold">Campaign</th>
+                    <th class="px-4 py-2 font-bold">Spend</th>
+                    <th class="px-4 py-2 font-bold">Revenue</th>
+                    <th class="px-4 py-2 font-bold">ROAS</th>
+                    <th class="px-4 py-2 font-bold">Status</th>
+                  </tr>
+                </thead>
                 <tbody class="divide-y divide-zinc-100 text-zinc-800">
-                  <tr><td class="px-4 py-3 font-medium">Prospecting — Broad</td><td class="px-4 py-3">$1,064.17</td><td class="px-4 py-3">$2,989.61</td><td class="px-4 py-3">2.8x</td><td class="px-4 py-3"><span class="text-emerald-600 font-semibold uppercase tracking-wide">Strong</span></td></tr>
-                  <tr><td class="px-4 py-3 font-medium">Retargeting — 30d</td><td class="px-4 py-3">$1,216.20</td><td class="px-4 py-3">$4,550.01</td><td class="px-4 py-3">4.17x</td><td class="px-4 py-3"><span class="text-emerald-600 font-semibold uppercase tracking-wide">Strong</span></td></tr>
-                  <tr><td class="px-4 py-3 font-medium">Lookalike — Top 1%</td><td class="px-4 py-3">$760.12</td><td class="px-4 py-3">$1,549.05</td><td class="px-4 py-3">2.61x</td><td class="px-4 py-3"><span class="text-emerald-600 font-semibold uppercase tracking-wide">Strong</span></td></tr>
+                  <tr><td class="px-4 py-3 font-bold">Prospecting - Broad</td><td class="px-4 py-3">$1,064.17</td><td class="px-4 py-3">$2,989.61</td><td class="px-4 py-3">2.8x</td><td class="px-4 py-3"><span class="font-bold uppercase tracking-wide text-emerald-600">Strong</span></td></tr>
+                  <tr><td class="px-4 py-3 font-bold">Retargeting - 30d</td><td class="px-4 py-3">$1,216.20</td><td class="px-4 py-3">$4,550.01</td><td class="px-4 py-3">4.17x</td><td class="px-4 py-3"><span class="font-bold uppercase tracking-wide text-emerald-600">Strong</span></td></tr>
+                  <tr><td class="px-4 py-3 font-bold">Lookalike - Top 1%</td><td class="px-4 py-3">$760.12</td><td class="px-4 py-3">$1,549.05</td><td class="px-4 py-3">2.61x</td><td class="px-4 py-3"><span class="font-bold uppercase tracking-wide text-emerald-600">Strong</span></td></tr>
                 </tbody>
               </table>
             </div>
           </div>
         </div>
-        <!-- Email Footer -->
-        <div class="bg-[#0f172a] text-white px-8 py-6 flex items-center justify-between text-sm">
-          <div><div class="font-semibold">Vividli</div><div class="text-zinc-400 text-xs mt-1">Generated automatically on 20 April 2026.</div></div>
-          <div class="text-[#2979FF] font-medium">Questions? Just reply to this email.</div>
+
+        <div class="flex items-center justify-between gap-4 bg-[#10141f] px-8 py-6 text-sm text-white">
+          <div><div class="font-bold">Vividli</div><div class="mt-1 text-xs text-white/55">Generated automatically on 20 April 2026.</div></div>
+          <div class="font-bold text-[#7dd9ff]">Questions? Just reply to this email.</div>
         </div>
       </div>
     </div>
   </div>
 
   <script>
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
-    }, { threshold: 0.12 });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const root = document.documentElement;
     const modalOverlay = document.getElementById('report-modal-overlay');
+    const modalCloseButton = document.getElementById('modal-close-btn');
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const reportWindow = document.getElementById('report-window');
     let previouslyFocused = null;
+
+    const updateScrollProgress = () => {
+      const scrollable = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      const progress = Math.min(100, Math.max(0, (window.scrollY / scrollable) * 100));
+      root.style.setProperty('--scroll-progress', `${progress}%`);
+    };
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -4% 0px' });
+
+    document.querySelectorAll('[data-reveal], .stagger').forEach((el) => revealObserver.observe(el));
+
+    const workflow = document.querySelector('[data-observe-workflow]');
+    if (workflow) {
+      const workflowObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          workflow.classList.add('visible');
+          workflowObserver.unobserve(workflow);
+        });
+      }, { threshold: 0.28 });
+      workflowObserver.observe(workflow);
+    }
+
+    const animateNumber = (el) => {
+      if (el.dataset.counted) return;
+      el.dataset.counted = 'true';
+      const target = Number(el.dataset.countTo || 0);
+      const prefix = el.dataset.prefix || '';
+      const suffix = el.dataset.suffix || '';
+      const duration = prefersReducedMotion ? 1 : 1050;
+      const start = performance.now();
+
+      const frame = (now) => {
+        const progress = Math.min(1, (now - start) / duration);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const value = Math.round(target * eased);
+        el.textContent = `${prefix}${value}${suffix}`;
+        if (progress < 1) requestAnimationFrame(frame);
+      };
+
+      requestAnimationFrame(frame);
+    };
+
+    const countObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) animateNumber(entry.target);
+      });
+    }, { threshold: 0.45 });
+
+    document.querySelectorAll('[data-count-to]').forEach((el) => countObserver.observe(el));
+
+    if (!prefersReducedMotion) {
+      document.querySelectorAll('[data-tilt]').forEach((card) => {
+        card.addEventListener('pointermove', (event) => {
+          const rect = card.getBoundingClientRect();
+          const x = event.clientX - rect.left;
+          const y = event.clientY - rect.top;
+          const rotateX = ((y / rect.height) - 0.5) * -5;
+          const rotateY = ((x / rect.width) - 0.5) * 5;
+          card.style.setProperty('--mx', `${(x / rect.width) * 100}%`);
+          card.style.setProperty('--my', `${(y / rect.height) * 100}%`);
+          card.style.setProperty('--rx', `${rotateX}deg`);
+          card.style.setProperty('--ry', `${rotateY}deg`);
+        });
+
+        card.addEventListener('pointerleave', () => {
+          card.style.setProperty('--rx', '0deg');
+          card.style.setProperty('--ry', '0deg');
+        });
+      });
+    }
+
+    const parallaxItems = Array.from(document.querySelectorAll('[data-parallax]'));
+    let ticking = false;
+    const updateParallax = () => {
+      if (!prefersReducedMotion) {
+        parallaxItems.forEach((item) => {
+          const speed = Number(item.dataset.speed || 0);
+          const rect = item.getBoundingClientRect();
+          const offset = (window.innerHeight * 0.5 - rect.top) * speed;
+          item.style.setProperty('--parallax-y', `${offset}px`);
+        });
+      }
+      updateScrollProgress();
+      ticking = false;
+    };
+
+    const requestScrollUpdate = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(updateParallax);
+    };
+
+    window.addEventListener('scroll', requestScrollUpdate, { passive: true });
+    window.addEventListener('resize', requestScrollUpdate);
+    updateParallax();
+
+    document.querySelectorAll('[data-report-tab]').forEach((button) => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('[data-report-tab]').forEach((tab) => tab.classList.remove('active'));
+        button.classList.add('active');
+        reportWindow.style.setProperty('--report-shift', button.dataset.shift || '0');
+      });
+
+      button.addEventListener('mouseenter', () => {
+        if (window.matchMedia('(hover: hover)').matches) {
+          reportWindow.style.setProperty('--report-shift', button.dataset.shift || '0');
+        }
+      });
+    });
+
+    const sectionIds = ['how', 'example', 'impact', 'pricing', 'faq'];
+    const navLinks = Array.from(document.querySelectorAll('[data-nav-link]'));
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        navLinks.forEach((link) => {
+          link.classList.toggle('active', link.getAttribute('href') === `#${entry.target.id}`);
+        });
+      });
+    }, { threshold: 0.32 });
+
+    sectionIds.forEach((id) => {
+      const section = document.getElementById(id);
+      if (section) sectionObserver.observe(section);
+    });
+
+    menuToggle.addEventListener('click', () => {
+      const nextState = !mobileMenu.classList.contains('open');
+      mobileMenu.classList.toggle('open', nextState);
+      menuToggle.setAttribute('aria-expanded', String(nextState));
+      menuToggle.innerHTML = nextState ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
+    });
+
+    document.querySelectorAll('[data-mobile-link]').forEach((link) => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        menuToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
+      });
+    });
 
     function openReportModal() {
       previouslyFocused = document.activeElement;
+      mobileMenu.classList.remove('open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      menuToggle.innerHTML = '<i class="fa-solid fa-bars"></i>';
       modalOverlay.classList.add('open');
-      document.body.style.overflow = 'hidden';
-      document.getElementById('modal-close-btn').focus();
+      modalOverlay.scrollTop = 0;
+      document.body.classList.add('modal-open');
+      modalCloseButton.focus();
     }
 
     function closeReportModal() {
       modalOverlay.classList.remove('open');
-      document.body.style.overflow = '';
+      document.body.classList.remove('modal-open');
       if (previouslyFocused) previouslyFocused.focus();
     }
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && modalOverlay.classList.contains('open')) closeReportModal();
+    window.openReportModal = openReportModal;
+    window.closeReportModal = closeReportModal;
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && modalOverlay.classList.contains('open')) closeReportModal();
     });
   </script>
 </body>
