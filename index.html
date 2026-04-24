@@ -78,10 +78,13 @@
       top: 0;
       left: 0;
       z-index: 80;
-      width: var(--scroll-progress, 0%);
+      width: 100%;
       height: 3px;
       background: linear-gradient(90deg, var(--brand), var(--mint), var(--sun));
       box-shadow: 0 0 22px rgba(41, 121, 255, 0.55);
+      transform: scaleX(var(--scroll-progress, 0));
+      transform-origin: left;
+      will-change: transform;
     }
 
     .site-nav {
@@ -358,6 +361,8 @@
     .section {
       position: relative;
       padding: 6.5rem 0;
+      content-visibility: auto;
+      contain-intrinsic-size: auto 58rem;
     }
 
     .section-soft {
@@ -956,6 +961,8 @@
       background:
         linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0)),
         #0b0d13;
+      content-visibility: auto;
+      contain-intrinsic-size: auto 44rem;
     }
 
     .integration-panel {
@@ -1129,6 +1136,8 @@
       background:
         linear-gradient(120deg, rgba(41,121,255,0.18), rgba(72,213,151,0.1), rgba(246,196,83,0.08)),
         #0b0d13;
+      content-visibility: auto;
+      contain-intrinsic-size: auto 18rem;
     }
 
     .email-float {
@@ -1710,11 +1719,11 @@
                   <section class="report-chart-grid">
                     <div class="report-chart-panel">
                       <h4>ROAS Trend - Last 30 Days</h4>
-                      <img src="roas_chart.png" alt="ROAS trend chart">
+                      <img src="roas_chart.png" alt="ROAS trend chart" loading="lazy" decoding="async">
                     </div>
                     <div class="report-chart-panel">
                       <h4>Advertising Spend vs Attributed Revenue - Weekly</h4>
-                      <img src="spend_revenue_chart (1).png" alt="Spend versus attributed revenue chart">
+                      <img src="spend_revenue_chart (1).png" alt="Spend versus attributed revenue chart" loading="lazy" decoding="async">
                     </div>
                   </section>
 
@@ -1954,7 +1963,7 @@
             </summary>
             <div class="faq-answer">
               <div class="px-5 pb-5 text-sm leading-7 text-[var(--muted)]">
-                That's up to you. The report arrives from your agency's email domain and carries your branding. Most agencies present it as part of their standard reporting process.
+                That's up to you. The report uses Vividli's current sending setup while carrying your agency branding, client tone, and positioning. Most agencies present it as part of their standard reporting process.
               </div>
             </div>
           </details>
@@ -2033,8 +2042,8 @@
           </div>
 
           <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <div class="rounded-[8px] bg-zinc-100 p-6"><p class="mb-4 font-bold">ROAS Trend - Last 30 Days</p><img src="roas_chart.png" alt="ROAS Trend Chart" class="rounded-[8px]"></div>
-            <div class="rounded-[8px] bg-zinc-100 p-6"><p class="mb-4 font-bold">Advertising Spend vs Attributed Revenue - Weekly</p><img src="spend_revenue_chart (1).png" alt="Spend vs Revenue Chart" class="rounded-[8px]"></div>
+            <div class="rounded-[8px] bg-zinc-100 p-6"><p class="mb-4 font-bold">ROAS Trend - Last 30 Days</p><img src="roas_chart.png" alt="ROAS Trend Chart" class="rounded-[8px]" loading="lazy" decoding="async"></div>
+            <div class="rounded-[8px] bg-zinc-100 p-6"><p class="mb-4 font-bold">Advertising Spend vs Attributed Revenue - Weekly</p><img src="spend_revenue_chart (1).png" alt="Spend vs Revenue Chart" class="rounded-[8px]" loading="lazy" decoding="async"></div>
           </div>
 
           <div>
@@ -2088,18 +2097,20 @@
 
   <script>
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const allowMotionEffects = !prefersReducedMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     const root = document.documentElement;
     const modalOverlay = document.getElementById('report-modal-overlay');
     const modalCloseButton = document.getElementById('modal-close-btn');
     const menuToggle = document.getElementById('menu-toggle');
     const mobileMenu = document.getElementById('mobile-menu');
     const reportWindow = document.getElementById('report-window');
+    const hero = document.querySelector('.hero');
     let previouslyFocused = null;
 
     const updateScrollProgress = () => {
       const scrollable = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-      const progress = Math.min(100, Math.max(0, (window.scrollY / scrollable) * 100));
-      root.style.setProperty('--scroll-progress', `${progress}%`);
+      const progress = Math.min(1, Math.max(0, window.scrollY / scrollable));
+      root.style.setProperty('--scroll-progress', progress.toFixed(4));
     };
 
     const revealObserver = new IntersectionObserver((entries) => {
@@ -2314,7 +2325,7 @@
 
     document.querySelectorAll('[data-count-to]').forEach((el) => countObserver.observe(el));
 
-    if (!prefersReducedMotion) {
+    if (allowMotionEffects) {
       document.querySelectorAll('[data-tilt]').forEach((card) => {
         card.addEventListener('pointermove', (event) => {
           const rect = card.getBoundingClientRect();
@@ -2336,13 +2347,24 @@
     }
 
     const parallaxItems = Array.from(document.querySelectorAll('[data-parallax]'));
+    let parallaxMetrics = [];
+    let parallaxActive = Boolean(hero);
     let ticking = false;
+
+    const refreshParallaxMetrics = () => {
+      parallaxMetrics = parallaxItems.map((item) => ({
+        item,
+        speed: Number(item.dataset.speed || 0),
+        top: item.getBoundingClientRect().top + window.scrollY
+      }));
+    };
+
+    refreshParallaxMetrics();
+
     const updateParallax = () => {
-      if (!prefersReducedMotion) {
-        parallaxItems.forEach((item) => {
-          const speed = Number(item.dataset.speed || 0);
-          const rect = item.getBoundingClientRect();
-          const offset = (window.innerHeight * 0.5 - rect.top) * speed;
+      if (!prefersReducedMotion && parallaxActive) {
+        parallaxMetrics.forEach(({ item, speed, top }) => {
+          const offset = (window.innerHeight * 0.5 - (top - window.scrollY)) * speed;
           item.style.setProperty('--parallax-y', `${offset}px`);
         });
       }
@@ -2357,7 +2379,24 @@
     };
 
     window.addEventListener('scroll', requestScrollUpdate, { passive: true });
-    window.addEventListener('resize', requestScrollUpdate);
+    window.addEventListener('resize', () => {
+      refreshParallaxMetrics();
+      requestScrollUpdate();
+    });
+    window.addEventListener('load', () => {
+      refreshParallaxMetrics();
+      requestScrollUpdate();
+    }, { once: true });
+
+    if (hero) {
+      const parallaxObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          parallaxActive = entry.isIntersecting;
+        });
+      }, { rootMargin: '20% 0px' });
+      parallaxObserver.observe(hero);
+    }
+
     updateParallax();
 
     document.querySelectorAll('[data-report-tab]').forEach((button) => {
