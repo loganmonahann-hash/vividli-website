@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Vividli sends automated AI-powered performance reports before invoices land, helping agencies prove value and reduce churn.">
   <title>Vividli | Value Before The Bill</title>
-  <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="favicon.png?v=2">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=2">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://cdnjs.cloudflare.com">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -92,6 +92,16 @@
       background: rgba(7, 8, 13, 0.76);
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
+    }
+
+    .site-logo {
+      display: block;
+      height: 2.15rem;
+      width: auto;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.96);
+      padding: 0.32rem 0.42rem;
+      box-shadow: 0 12px 34px rgba(41, 121, 255, 0.12);
     }
 
     .nav-link {
@@ -559,9 +569,12 @@
     }
 
     .report-document-logo {
-      height: 1.7rem;
+      height: 1.34rem;
       width: auto;
-      filter: brightness(0) invert(1);
+      border-radius: 6px;
+      background: white;
+      padding: 0.24rem 0.32rem;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
     }
 
     .report-document-date {
@@ -1298,7 +1311,7 @@
   <nav class="site-nav" aria-label="Primary navigation">
     <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
       <a href="#top" class="flex items-center gap-3" aria-label="Vividli home">
-        <img src="logo.png" alt="Vividli" class="h-9 w-auto">
+        <img src="logo.png" alt="Vividli" class="site-logo">
       </a>
 
       <div class="hidden items-center gap-1 rounded-[8px] border border-white/10 bg-white/[0.04] p-1 text-sm font-semibold lg:flex">
@@ -1992,7 +2005,7 @@
       <div class="email-float">
         <div class="bg-[#10141f] px-8 py-8 text-white">
           <div class="flex items-start justify-between gap-6">
-            <img src="logo.png" alt="Vividli" class="h-8 w-auto brightness-0 invert">
+            <img src="logo.png" alt="Vividli" class="report-document-logo">
             <div class="text-right text-sm">
               <div>21 Mar - 19 Apr 2026</div>
               <div class="text-white/65">Monthly Performance Report</div>
